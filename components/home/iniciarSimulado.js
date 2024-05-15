@@ -31,9 +31,7 @@ const CustomCard = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Adicione o restante do conteúdo abaixo do card */}
       <View style={styles.remainingContent}>
-        {/* Conteúdo restante aqui */}
       </View>
     </View>
   );
@@ -44,17 +42,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start', // Alinhe o conteúdo no topo da página
-    margin: 10,
+    marginHorizontal: 10,
   },
   card: {
-    width: "100%", // Ajustado para ocupar 100% da largura
+    width: "100%", 
     height: 165,
     borderRadius: 20,
     backgroundColor: '#8A45ED',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10, // Ajustado para 10px de margem
-    padding: 10, // Ajustado para 10px de padding
+    margin: 10, 
+    padding: 10,
     borderBottomWidth: 4,
     borderColor: '#3C1673',
     shadowColor: '#3C1673',
@@ -94,8 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   remainingContent: {
-    marginTop: 185, // Margem superior para o restante do conteúdo para começar abaixo do card
-    // Adicione outros estilos conforme necessário
+    marginTop: 185,
   },
 });
 
