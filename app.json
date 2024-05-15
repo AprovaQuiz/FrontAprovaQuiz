@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FrontAprovaQuiz",
-    "slug": "FrontAprovaQuiz",
+    "name": "aprovaquiz",
+    "slug": "snack-64b8d8c7-286e-4ecc-a249-35f797b5d307",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,9 +11,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": true
     },

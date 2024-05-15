@@ -1,13 +1,20 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native'; 
 
 const Header = () => {
+  const navigation = useNavigation(); 
+
+  const navigateToNotificacoes = () => {
+    navigation.navigate('Notificações');
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require('../../assets/icon.png')}
+          source={require('../assets/icon.png')}
           style={{ width: 50, height: 50 }}
         />
         <Text style={styles.text}>
@@ -17,17 +24,17 @@ const Header = () => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
-          <Icon name="bell" size={30} color="#000" />
+          <Icon name="search" size={25} color="#000" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="search" size={30} color="#000" />
+        <TouchableOpacity style={styles.button} onPress={navigateToNotificacoes}>
+          <Icon name="bell" size={25} color="#000" />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -64,6 +71,6 @@ const styles = {
   button: {
     marginLeft: 10,
   },
-};
+});
 
 export default Header;
