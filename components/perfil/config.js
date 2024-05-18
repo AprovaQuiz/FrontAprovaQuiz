@@ -25,7 +25,8 @@ const Config = () => {
 
   const handleLogout = () => {
     // Lógica para lidar com o logout
-    console.log('Logout executado');
+    navigation.navigate('TelaInicial');
+    //console.log('Logout executado');
   };
 
   const navigateToNotifications = () => {
