@@ -5,6 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 const TelaInicial = () => {
     const navigation = useNavigation();
 
+    const navigateToLogin = () => {
+      console.log("Navegando para Login")
+      navigation.navigate("TelaLogin");
+    }
+
     return (
         <View style={styles.container}>
             <Image source={{uri:"https://i.pinimg.com/736x/1f/90/45/1f904556330b94f4846a334ff79ee7e0.jpg"}} style={styles.imagem} />
@@ -14,10 +19,10 @@ const TelaInicial = () => {
                 <Text style={styles.titulo2}>Vindo</Text>
             </View>
             
-            <TouchableOpacity style={styles.botaoReg}>
+            <TouchableOpacity style={styles.botaoCad}>
                 <Text style={styles.botaoTexto}>Cadastre-se</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.botaoLog}>
+            <TouchableOpacity style={styles.botaoLog} onPress={navigateToLogin}>
                 <Text style={styles.botaoTexto}>Login</Text>
             </TouchableOpacity>
         </View>
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
       },
-      botaoReg:{
+      botaoCad:{
         marginTop: 25,
         width: 280,
         height: 50,

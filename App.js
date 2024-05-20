@@ -14,6 +14,7 @@ import Estatisticas from './screens/estatisticas';
 import Notificacoes from './screens/notificacoes';
 import Header from './components/header';
 import TelaInicial from './screens/telaInicial';
+import TelaLogin from './screens/login';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,6 +41,7 @@ const PerfilStack = () => (
     <Stack.Screen name="NotificacoesPerfil" component={NotificacoesPerfil} options={{ headerShown: false }} />
     <Stack.Screen name="Estatisticas" component={Estatisticas} options={{ headerShown: false }} />
     <Stack.Screen name="TelaInicial" component={TelaInicial} options={{headerShown: false}} />
+    <Stack.Screen name="TelaLogin" component={TelaLogin} options={{headerShown: false}} />
   </Stack.Navigator>
 );
 
