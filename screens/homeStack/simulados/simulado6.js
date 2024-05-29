@@ -1,0 +1,1 @@
+// tela de Loading, dps c Berato replicar o que a Karol fez em outra parte do proj

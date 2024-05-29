@@ -1,22 +1,26 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const CardCadernos = ({ cadernos }) => {
+const CardCadernos = ({ cadernos }, onCardClick) => {
   return (
     <View>
       {cadernos.map((caderno, index) => (
-        <View key={index} style={styles.container}>
-          <View style={styles.imageContainer}>
-            <Image source={{ uri: caderno.imagem }} style={styles.image} />
-            <View style={styles.rectangle}>
-              <Text style={styles.rectangleText}>{caderno.quantidadeQuestoes}qs</Text>
+        <TouchableOpacity key={index} onPress={() => onCardClick(caderno)}>
+          <View key={index} style={styles.container}>
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: caderno.imagem }} style={styles.image} />
+              <View style={styles.rectangle}>
+                <Text style={styles.rectangleText}>
+                  {caderno.quantidadeQuestoes}qs
+                </Text>
+              </View>
+            </View>
+            <View style={styles.bottomContainer}>
+              <Text style={styles.title}>{caderno.titulo}</Text>
+              <Text style={styles.description}>{caderno.descricao}</Text>
             </View>
           </View>
-          <View style={styles.bottomContainer}>
-            <Text style={styles.title}>{caderno.titulo}</Text>
-            <Text style={styles.description}>{caderno.descricao}</Text>
-          </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );

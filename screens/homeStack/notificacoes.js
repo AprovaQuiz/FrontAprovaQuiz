@@ -1,14 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
-import NotificacoesItem from '../components/home/notificacoesItem';
-import notificacoes from '../data/notificacoesData';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import NotificacoesItem from '../../components/home/notificacoesItem';
+import notificacoes from '../../data/notificacoesData';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const Notificacoes = () => {
+  const navigation = useNavigation();
+
+  const navigateToHome = () => {
+    navigation.navigate('Home');
+  };
+
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={navigateToHome}>
           <Ionicons name="arrow-back" size={24} color="#3C1673" />
         </TouchableOpacity>
         <Text style={styles.notificacoesTitle}>Notificações</Text>
@@ -22,10 +30,15 @@ const Notificacoes = () => {
         ))}
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -38,8 +51,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
     backgroundColor: '#fff',
+    marginBottom: 15,
   },
   notificacoesTitle: {
     fontSize: 24,

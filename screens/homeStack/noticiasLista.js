@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import CardNoticiasListagem from '../components/noticias/cardNoticiasListagem';
-import noticias from '../data/noticias/noticias';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, SafeAreaView } from 'react-native';
+import CardNoticiasListagem from '../../components/noticias/cardNoticiasListagem';
+import noticias from '../../data/noticias/noticias';
 import { Ionicons } from '@expo/vector-icons'; 
 
 const NoticiasLista = ({ navigation }) => {
@@ -12,6 +12,7 @@ const NoticiasLista = ({ navigation }) => {
   }, []);
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -31,10 +32,15 @@ const NoticiasLista = ({ navigation }) => {
       ))}
     </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -43,8 +49,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
     backgroundColor: '#fff',
+    marginBottom: 15,
   },
   noticiasTitle: {
     fontSize: 24,

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const HistoricoItem = ({ titulo, nivel, realizadoEm, imagemUrl }) => {
+const HistoricoItem = ({ titulo, cadernos, assuntos, realizadoEm, imagemUrl }) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -17,7 +17,8 @@ const HistoricoItem = ({ titulo, nivel, realizadoEm, imagemUrl }) => {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{titulo}</Text>
-          <Text style={styles.subtitle}>{nivel}</Text>
+          <Text style={styles.subtitle}>{cadernos}</Text>
+          <Text style={styles.subtitle}>{assuntos}</Text>
           <Text style={styles.date}>Realizado em: {realizadoEm}</Text>
         </View>
       </View>
@@ -41,18 +42,16 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: 'relative',
-    margin: 0,
   },
   image: {
-    height: 100,
+    height: 130,
     width: 130,
-    margin: 0,
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
   },
   deleteButton: {
     position: 'absolute',
-    bottom: 10,
+    top: 10,
     right: 10,
   },
   infoBadge: {
@@ -68,12 +67,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   infoContainer: {
+    flex: 1,
     marginLeft: 10,
-    justifyContent: 'space-between',
+    padding: 5,
   },
   title: {
     fontWeight: 'bold',
-    marginTop: 10,
     fontSize: 17,
   },
   subtitle: {
@@ -82,7 +81,7 @@ const styles = StyleSheet.create({
   date: {
     marginTop: 10,
     marginBottom: 10,
-  }
+  },
 });
 
 export default HistoricoItem;

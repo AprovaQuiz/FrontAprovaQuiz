@@ -1,23 +1,24 @@
 import React from 'react';
 import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const CardMateriasListagem = ({ materias, onMateriaClick }) => {
-
+const CardAssuntosListagem = ({ parteAssunto, onMateriaClick }) => {
   return (
+    <>
     <ScrollView style={styles.container}>
-      {materias.map((materia, index) => (
+      {parteAssunto.map((item, index) => (
         <TouchableOpacity
           key={index}
-          onPress={() => onMateriaClick(materia)}
+          onPress={() => onMateriaClick(item)} // Passando o assunto como argumento
           style={styles.card}
         >
           <View style={styles.cardContainer}>
-            <Text style={styles.title}>{materia.nome}</Text>
-            <Image source={{ uri: materia.imagem }} style={styles.image} />
+          <Text style={styles.title}>{item.nome}</Text>
+            <Image source={{ uri: item.imagem }} style={styles.image} />
           </View>
         </TouchableOpacity>
       ))}
     </ScrollView>
+    </>
   );
 };
 
@@ -47,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardMateriasListagem;
+export default CardAssuntosListagem;

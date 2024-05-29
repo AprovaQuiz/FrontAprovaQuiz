@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   cardContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   card: {
     borderRadius: 20,

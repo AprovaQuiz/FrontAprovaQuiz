@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +14,7 @@ const Estatisticas = () => {
   const navigation = useNavigation();
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView style={styles.estatisticasPerfil}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -62,10 +64,15 @@ const Estatisticas = () => {
         </View>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   estatisticasPerfil: {
     flex: 1,
     padding: 20,
@@ -74,8 +81,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
     backgroundColor: '#fff',
+    marginBottom: 15,
   },
   estatisticasTitle: {
     fontSize: 24,
@@ -93,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: -10,
   },
   item: {
     flex: 1,

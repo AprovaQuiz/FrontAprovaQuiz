@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -9,25 +9,28 @@ const SwitchButton = ({ title, onToggle, isOn, isLast }) => {
   };
 
   return (
-    <TouchableOpacity
+    <SafeAreaView style={styles.safeArea}>
+    <View
       style={[styles.item, isLast && styles.lastItem]}
       onPress={toggleSwitch}>
       <View style={styles.buttonContent}>
         <Text style={styles.buttonTitle}>{title}</Text>
-        <View
+        <TouchableOpacity
           style={[
             styles.toggleContainer,
             isOn ? styles.activeToggle : styles.inactiveToggle,
-          ]}>
+          ]}
+          onPress={toggleSwitch}> 
           <View
             style={[
               styles.toggleCircle,
               isOn ? styles.activeCircle : styles.inactiveCircle,
             ]}
           />
-        </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
+    </SafeAreaView>
   );
 };
 
@@ -69,9 +72,14 @@ const NotificacoesPerfil = () => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   notificacoesPerfil: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    padding: 10,
     backgroundColor: '#fff',
   },
   menuContainer: {
@@ -103,7 +111,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 30,
     borderRadius: 15,
-    borderWidth: 1,
     borderColor: '#ccc',
     padding: 2,
     justifyContent: 'center',
@@ -114,26 +121,24 @@ const styles = StyleSheet.create({
     borderRadius: 13,
   },
   activeToggle: {
-    backgroundColor: '#3C1673', // Cor de fundo quando ativado
-    borderColor: '#3C1673', // Cor da borda quando ativado
+    backgroundColor: '#3C1673', 
   },
   inactiveToggle: {
-    backgroundColor: '#ccc', // Cor de fundo quando desativado
-    borderColor: '#ccc', // Cor da borda quando desativado
+    backgroundColor: '#ccc', 
   },
   activeCircle: {
-    backgroundColor: '#FFF', // Cor do círculo quando ativado
-    transform: [{ translateX: 18 }], // Posição à direita quando ativado
+    backgroundColor: '#FFF', 
+    transform: [{ translateX: 20 }], 
   },
   inactiveCircle: {
-    backgroundColor: '#FFF', // Cor do círculo quando desativado
-    transform: [{ translateX: 2 }], // Posição à esquerda quando desativado
+    backgroundColor: '#FFF', 
+    transform: [{ translateX: 0 }], 
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
     backgroundColor: '#fff',
+    marginBottom: 15,
   },
   notificacoesTitle: {
     fontSize: 24,

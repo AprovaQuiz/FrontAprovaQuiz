@@ -11,6 +11,11 @@ import cadernos from '../../data/cadernos';
 const CadernosScreen = () => {
   const navigation = useNavigation();
 
+  const handleCardClick = (caderno) => {
+    // Navegar para MateriasLista com a categoria do caderno
+    navigation.navigate('MateriasLista', { categoria: caderno.categoria });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -18,7 +23,7 @@ const CadernosScreen = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <CardCadernos cadernos={[item]} />}
+        renderItem={({ item }) => <CardCadernos cadernos={[item]} onCardClick={handleCardClick} />}
       />
     </View>
   );
@@ -29,6 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: '#fff',
+    marginBottom: 25,
   },
 });
 

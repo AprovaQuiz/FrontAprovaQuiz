@@ -1,17 +1,23 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; 
 
 const Header = () => {
   const navigation = useNavigation(); 
+  
+  const navigateToPesquisa = () => {
+    navigation.navigate('Pesquisa'); 
+  };
 
   const navigateToNotificacoes = () => {
     navigation.navigate('Notificações');
   };
   
+  
+  
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
           source={require('../assets/icon.png')}
@@ -23,14 +29,14 @@ const Header = () => {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="search" size={25} color="#000" />
+        <TouchableOpacity style={styles.button} onPress={navigateToPesquisa}>
+          <Ionicons name="search-outline" size={25} color="#000" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={navigateToNotificacoes}>
-          <Icon name="bell" size={25} color="#000" />
+          <Ionicons name="notifications-outline" size={25} color="#000" />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -46,6 +52,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 10,
   },
   text: {
     fontSize: 50,
@@ -67,6 +74,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
+    marginRight: 10,
   },
   button: {
     marginLeft: 10,

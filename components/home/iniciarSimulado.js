@@ -1,12 +1,20 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const CustomCard = () => {
+  const navigation = useNavigation();
+  
   // Função para gerar um número aleatório entre um intervalo
   const getRandomNumber = (min, max) => {
     return Math.random() * (max - min) + min;
+  };
+
+  
+  const goToSimulados = () => {
+    navigation.navigate('Simulado1'); 
   };
 
   // Posições aleatórias para as bolas
@@ -26,12 +34,10 @@ const CustomCard = () => {
         <View style={[styles.circle, circle5Position]} />
         <View style={styles.textAndButtonContainer}>
           <Text style={styles.title}>Realize o simulado e teste seus conhecimentos!</Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={goToSimulados}>
             <Text style={styles.buttonText}>Gerar simulado</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.remainingContent}>
       </View>
     </View>
   );
@@ -41,7 +47,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start', // Alinhe o conteúdo no topo da página
+    justifyContent: 'flex-start', 
     marginHorizontal: 10,
   },
   card: {
@@ -51,11 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#8A45ED',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10, 
+    marginHorizontal: 10, 
+    marginBottom: 20,
     padding: 10,
     borderBottomWidth: 4,
-    borderColor: '#3C1673',
-    shadowColor: '#3C1673',
+    borderBottomColor: '#3C1673', 
   },
   circle: {
     position: 'absolute',
@@ -65,8 +71,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   textAndButtonContainer: {
-    alignItems: 'flex-start', // Alinha à esquerda
-    paddingLeft: 10, // Adiciona um espaço à esquerda
+    alignItems: 'flex-start', 
+    paddingLeft: 10, 
   },
   title: {
     color: '#FFFFFF',
@@ -90,9 +96,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#8A45ED',
     fontSize: 13,
-  },
-  remainingContent: {
-    marginTop: 185,
   },
 });
 
