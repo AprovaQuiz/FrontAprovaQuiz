@@ -42,6 +42,9 @@ import ResetPasswordScreen from './screens/main/inicial/login/resetPassword';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
+
+
 const HomeStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Home" component={HomeScreen} options={{ header: () => <Header /> }} />
@@ -124,48 +127,48 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen
+        <Stack.Screen
           name="Loading"
           component={LoadingScreen}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen
           name="CadLogin"
           component={CadLogin}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen
           name="ConfirmationScreen"
           component={ConfirmationScreen}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen
           name="SignUpScreen"
           component={SignUpScreen}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen
           name="LoginScreen"
           component={LoginScreen}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         /><Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
-          options={{ headerShown: false, tabBarVisible: false  }}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
-        <Stack.Screen 
-          name="VerifyEmail" 
-          component={VerifyEmailScreen} 
-          options={{ headerShown: false, tabBarVisible: false  }} 
+        <Stack.Screen
+          name="VerifyEmail"
+          component={VerifyEmailScreen}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
-        <Stack.Screen 
-        name="ResetPassword" component={ResetPasswordScreen} 
-        options={{ headerShown: false, tabBarVisible: false  }}
+        <Stack.Screen
+          name="ResetPassword" component={ResetPasswordScreen}
+          options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
         <Stack.Screen name="Pesquisa" component={Pesquisa} options={{ headerShown: false, tabBarVisible: false }} />
