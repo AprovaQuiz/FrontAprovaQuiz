@@ -4,13 +4,12 @@ import storage from "./storage";
 
 
 export const axiosAprovaApi = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: "https://aprovaquiz-rest-api-production.up.railway.app/",
 });
 
 axiosAprovaApi.interceptors.request.use(
 
   (config) => {
-    console.log(storage.load({ key: 'access-token' }))
 
     storage.load({ key: 'access-token' })
       .then(ret => {

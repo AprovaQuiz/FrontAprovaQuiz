@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
   SafeAreaView,
   Dimensions,
 } from "react-native";
@@ -14,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { axiosAprovaApi } from "../../../../config/http";
 import storage from "../../../../config/storage";
-
 
 
 const { width, height } = Dimensions.get("window");
@@ -33,11 +31,11 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
 
-
     const data = {
-      email: email,
+      email: isValidEmail(email),
       senha: password,
     }
+
     await axiosAprovaApi
       .post("/users/login", data)
       .then((r) => {
@@ -46,8 +44,7 @@ const LoginScreen = () => {
         return navigation.navigate('Main');
       })
       .catch((e) => {
-        console.log(e)
-        Alert(`${e.code == 401 ? e.response?.data.message : e.message}`);
+        alert(`${e.code == 401 ? e.response?.data.message : e.message}`);
       });
   }
 

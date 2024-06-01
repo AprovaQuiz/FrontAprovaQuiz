@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Dimensions, ActivityIndicator, Image, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { axiosAprovaApi } from '../../../../config/http';
+import storage from '../../../../config/storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,7 +26,9 @@ const ConfirmationScreen = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+
+
     // Verificação de dados antes de confirmar
     if (!username || !email || !password || !confirmPassword) {
       alert('Todos os campos são obrigatórios.');
@@ -36,22 +40,55 @@ const ConfirmationScreen = () => {
       return;
     }
 
+    if (password.length < 6 || !/[A-Z]/.test(password)) {
+      alert('Senha fraca, precisa ao menos 6 caracteres e ao menos uma letra Maiúscula');
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert('As senhas não coincidem.');
       return;
     }
 
-    // Simulação de confirmação de conta
+    let localSingUpCredentials = {}
+    await storage.load({
+      key: 'singUpCredentials'
+    })
+      .then(ret => {
+        localSingUpCredentials = ret
+      })
+
     setModalVisible(true);
-    setTimeout(() => {
-      setModalVisible(false),
-      navigation.replace('Main');
-    }, 1000);
+    const singUpData = {
+      nome: localSingUpCredentials.fullName,
+      userName: username,
+      dataNasc: localSingUpCredentials.dateOfBirth,
+      numCelular: localSingUpCredentials.phoneNumber,
+      email: email,
+      senha: password,
+      role: "normal"
+    }
+
+    await axiosAprovaApi.post('/users', singUpData)
+      .then(() => {
+        navigation.replace('Login');
+      })
+      .finally(() => {
+        setModalVisible(false)
+      })
+      .catch(e => {
+        if (e.response.data.message == "Email já cadastrado" || e.response.data.message == "Username já em uso")
+          alert(e.response.data.message)
+        else
+          alert(e)
+
+      })
+
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-    <View style={styles.header}>
+      <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.seta}>
@@ -65,91 +102,91 @@ const ConfirmationScreen = () => {
           Digite seu nome de usuário, endereço de e-mail, senha, data de nascimento e número de telefone.
         </Text>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Username</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Seu nome de usuário"
-          placeholderTextColor="#ccc"
-          value={username}
-          onChangeText={text => setUsername(text)}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Seu e-mail"
-          placeholderTextColor="#ccc"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={text => setEmail(text)}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Senha</Text>
-        <View style={styles.inputPasswordContainer}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Username</Text>
           <TextInput
-            style={styles.inputPassword}
-            placeholder="Sua senha"
+            style={styles.input}
+            placeholder="Seu nome de usuário"
             placeholderTextColor="#ccc"
-            secureTextEntry={!passwordVisible}
-            value={password}
-            onChangeText={text => setPassword(text)}
+            value={username}
+            onChangeText={text => setUsername(text)}
           />
-          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.icon}>
-            <Ionicons name={passwordVisible ? "eye-off" : "eye"} size={24} color="#ccc" />
-          </TouchableOpacity>
         </View>
-      </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Confirmar Senha</Text>
-        <View style={styles.inputPasswordContainer}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email</Text>
           <TextInput
-            style={styles.inputPassword}
-            placeholder="Confirme sua senha"
+            style={styles.input}
+            placeholder="Seu e-mail"
             placeholderTextColor="#ccc"
-            secureTextEntry={!confirmPasswordVisible}
-            value={confirmPassword}
-            onChangeText={text => setConfirmPassword(text)}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={text => setEmail(text)}
           />
-          <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.icon}>
-            <Ionicons name={confirmPasswordVisible ? "eye-off" : "eye"} size={24} color="#ccc" />
-          </TouchableOpacity>
         </View>
-      </View>
-      
-    <TouchableOpacity style={styles.button} onPress={handleConfirm}>
-        <Text style={styles.buttonText}>Confirmar</Text>
-      </TouchableOpacity>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-        onDismiss={() => {
-          setTimeout(() => {
-            navigation.navigate('Home');
-          }, 1000);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Image source={{uri:'https://snack-code-uploads.s3.us-west-1.amazonaws.com/~asset/9fc07281cc9be7961356b259c9dafa48'}} style={styles.profileImage} />
-            <Text style={styles.modalTitle}>Parabéns!</Text>
-            <Text style={styles.modalMessage}>Seu perfil está pronto.</Text>
-            <ActivityIndicator size="large" color="#8A45ED" />
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Senha</Text>
+          <View style={styles.inputPasswordContainer}>
+            <TextInput
+              style={styles.inputPassword}
+              placeholder="Sua senha"
+              placeholderTextColor="#ccc"
+              secureTextEntry={!passwordVisible}
+              value={password}
+              onChangeText={text => setPassword(text)}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.icon}>
+              <Ionicons name={passwordVisible ? "eye-off" : "eye"} size={24} color="#ccc" />
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </ScrollView>
-    
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Confirmar Senha</Text>
+          <View style={styles.inputPasswordContainer}>
+            <TextInput
+              style={styles.inputPassword}
+              placeholder="Confirme sua senha"
+              placeholderTextColor="#ccc"
+              secureTextEntry={!confirmPasswordVisible}
+              value={confirmPassword}
+              onChangeText={text => setConfirmPassword(text)}
+            />
+            <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.icon}>
+              <Ionicons name={confirmPasswordVisible ? "eye-off" : "eye"} size={24} color="#ccc" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={handleConfirm}>
+          <Text style={styles.buttonText}>Confirmar</Text>
+        </TouchableOpacity>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+          onDismiss={() => {
+            setTimeout(() => {
+              navigation.navigate('Home');
+            }, 1000);
+          }}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Image source={{ uri: 'https://snack-code-uploads.s3.us-west-1.amazonaws.com/~asset/9fc07281cc9be7961356b259c9dafa48' }} style={styles.profileImage} />
+              <Text style={styles.modalTitle}>Parabéns!</Text>
+              <Text style={styles.modalMessage}>Seu perfil está pronto.</Text>
+              <ActivityIndicator size="large" color="#8A45ED" />
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
+
     </SafeAreaView>
   );
 };
@@ -165,7 +202,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    fontSize: width * 0.1, 
+    fontSize: width * 0.1,
     fontWeight: 'bold',
     marginTop: height * 0.06,
   },
@@ -203,8 +240,8 @@ const styles = StyleSheet.create({
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center', 
-    marginTop: 46, 
+    alignSelf: 'center',
+    marginTop: 46,
   },
   buttonText: {
     color: 'white',
@@ -216,7 +253,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#8050C6', 
+    borderBottomColor: '#8050C6',
     marginBottom: 16,
   },
   inputPassword: {

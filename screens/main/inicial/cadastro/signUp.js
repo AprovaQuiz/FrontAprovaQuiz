@@ -13,6 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInputMask } from 'react-native-masked-text';
+import storage from '../../../../config/storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,6 +24,7 @@ const SignUpScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleContinue = () => {
+
     if (!isValidFullName(fullName)) {
       Alert.alert('Erro', 'Por favor, insira um nome válido.');
       return;
@@ -38,8 +40,18 @@ const SignUpScreen = () => {
       return;
     }
 
-    // Navega para a tela de confirmação
-    navigation.navigate('ConfirmationScreen');
+
+
+    storage.save({
+      key: 'singUpCredentials',
+      data: {
+        fullName: fullName,
+        dateOfBirth: dateOfBirth,
+        phoneNumber: phoneNumber
+      }
+    })
+
+    return navigation.navigate('ConfirmationScreen');
   };
 
   const isValidFullName = (name) => {
@@ -141,7 +153,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    fontSize: width * 0.1, 
+    fontSize: width * 0.1,
     fontWeight: 'bold',
     marginTop: height * 0.06,
   },
