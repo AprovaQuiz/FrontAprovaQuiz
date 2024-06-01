@@ -75,6 +75,7 @@ const ConfirmationScreen = () => {
       })
       .finally(() => {
         setModalVisible(false)
+        storage.remove({ key: 'singUpCredentials' })
       })
       .catch(e => {
         if (e.response.data.message == "Email já cadastrado" || e.response.data.message == "Username já em uso")
