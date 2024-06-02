@@ -12,10 +12,13 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { axiosAprovaApi } from '../../../../config/http';
 
 const { width, height } = Dimensions.get('window');
 
-const ResetPasswordScreen = () => {
+const ResetPasswordScreen = ({ route }) => {
+  const { email, number } = route.params;
+
   const navigation = useNavigation();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,12 +27,29 @@ const ResetPasswordScreen = () => {
   const [stayConnected, setStayConnected] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const handleResetPassword = () => {
+  const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
       alert('As senhas não coincidem. Por favor, tente novamente.');
       return;
     }
-    setShowModal(true);
+
+    if (newPassword.length < 6 || !/[A-Z]/.test(newPassword)) {
+      alert('Senha fraca, precisa ao menos 6 caracteres e ao menos uma letra Maiúscula');
+      return;
+    }
+
+    await axiosAprovaApi.patch('/passRecovers/password', {
+      email: email,
+      number: number,
+      senha: newPassword
+    })
+      .then(() => {
+        setShowModal(true);
+      })
+      .catch((e) => {
+        alert(e)
+      })
+
   };
 
   return (
@@ -125,10 +145,10 @@ const ResetPasswordScreen = () => {
               style={styles.modalButton}
               onPress={() => {
                 setShowModal(false);
-                navigation.navigate('Home');
+                navigation.navigate('Login');
               }}
             >
-              <Text style={styles.modalButtonText}>Voltar para a Home</Text>
+              <Text style={styles.modalButtonText}>Ir para o Login</Text>
             </TouchableOpacity>
           </View>
         </View>

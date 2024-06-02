@@ -12,20 +12,23 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { axiosAprovaApi } from '../../../../config/http';
 
 const { width, height } = Dimensions.get('window');
 
-const VerifyEmailScreen = () => {
+const VerifyEmailScreen = ({ route }) => {
   const navigation = useNavigation();
 
+  const { email } = route.params;
   const [code, setCode] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(55);
 
-useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : prevTimer));
     }, 1000);
     return () => clearInterval(interval);
+
   }, []);
 
   const handleChange = (index, value) => {
@@ -34,22 +37,51 @@ useEffect(() => {
     setCode(newCode);
   };
 
-  const handleResendCode = () => {
+  const handleResendCode = async () => {
     if (timer === 0) {
+      await axiosAprovaApi.post('/passRecovers', {
+        email: email
+      })
+        .then(() => {
+          alert('Código reenviado para seu e-mail');
+        })
+        .catch(e => {
+          alert(e)
+        })
+
       setTimer(55);
-      alert('Código reenviado para seu e-mail');
+
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const verificationCode = code.join('');
     if (verificationCode.length !== 4) {
       Alert.alert('Erro', 'Por favor, insira o código completo.');
       return;
     }
-  alert(`Código verificado: ${verificationCode}`);
-  navigation.navigate('ResetPassword');
-};
+
+    await axiosAprovaApi.post('/passRecovers/verifyNumber', {
+      email: email,
+      number: verificationCode
+    })
+      .then(() => {
+        alert(`Código verificado: ${verificationCode}`);
+        navigation.navigate('ResetPassword', {
+          email: email,
+          number: verificationCode
+        });
+      })
+      .catch(e => {
+        if (e.response.data.message == "Número de verificação errado")
+          alert(e.response.data.message)
+        else
+          alert(e)
+      })
+
+
+
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -65,23 +97,23 @@ useEffect(() => {
         <Text style={styles.instructions1}>Digite o código enviado para o seu e-mail.
         </Text>
         <View style={styles.codeContainer}>
-        {code.map((digit, index) => (
-          <TextInput
-            key={index}
-            style={styles.codeInput}
-            keyboardType="numeric"
-            maxLength={1}
-            value={digit}
-            onChangeText={(value) => handleChange(index, value)}
-          />
-        ))}
-      </View>
-      <TouchableOpacity onPress={handleResendCode} disabled={timer > 0}>
-        <Text style={styles.resendButtonText}>Não recebeu o e-mail?</Text>
-      </TouchableOpacity>
-      <Text style={styles.timerText}>
-        Você pode reenviar o código em {timer} s
-      </Text>
+          {code.map((digit, index) => (
+            <TextInput
+              key={index}
+              style={styles.codeInput}
+              keyboardType="numeric"
+              maxLength={1}
+              value={digit}
+              onChangeText={(value) => handleChange(index, value)}
+            />
+          ))}
+        </View>
+        <TouchableOpacity onPress={handleResendCode} disabled={timer > 0}>
+          <Text style={styles.resendButtonText}>Não recebeu o e-mail?</Text>
+        </TouchableOpacity>
+        <Text style={styles.timerText}>
+          Você pode reenviar o código em {timer} s
+        </Text>
 
         <TouchableOpacity style={styles.button} onPress={handleConfirm}>
           <Text style={styles.buttonText}>Confirmar</Text>
@@ -101,7 +133,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    fontSize: 38, 
+    fontSize: 38,
     fontWeight: 'bold',
     marginTop: height * 0.02,
   },

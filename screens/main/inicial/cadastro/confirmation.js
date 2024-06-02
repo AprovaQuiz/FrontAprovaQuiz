@@ -12,7 +12,6 @@ const ConfirmationScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [emailExistsModalVisible, setEmailExistsModalVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

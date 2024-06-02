@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { axiosAprovaApi } from '../../../../config/http';
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,15 +21,27 @@ const ForgotPasswordScreen = () => {
 
   const [email, setEmail] = useState('');
 
-const handleResetPassword = () => {
+  const handleResetPassword = async () => {
     if (!email || !isValidEmail(email)) {
       Alert.alert('Erro', 'Por favor, insira um email válido.');
       return;
     }
-    // Aqui você pode adicionar a lógica para enviar o email de recuperação de senha
-    alert(`Email de recuperação enviado para: ${email}`);
-    
-    navigation.navigate('VerifyEmail');
+
+    await axiosAprovaApi.post('/passRecovers', {
+      email: email
+    })
+      .then(() => {
+        alert(`Email de recuperação enviado para: ${email}`);
+      })
+      .finally(() => {
+        navigation.navigate('VerifyEmail', {
+          email: email
+        });
+      })
+      .catch(e => {
+        alert(e)
+      })
+
   };
 
   const isValidEmail = (email) => {
@@ -50,16 +63,16 @@ const handleResetPassword = () => {
         <Text style={styles.instructions1}>Digite seu email para receber um código de acesso.
         </Text>
         <View style={styles.inputContainer}>
-        <Text style={styles.label}>E-mail</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite seu e-mail"
-          placeholderTextColor="#ccc"
-          onChangeText={setEmail}
-          value={email}
-          keyboardType="email-address" 
-        />
-      </View>
+          <Text style={styles.label}>E-mail</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite seu e-mail"
+            placeholderTextColor="#ccc"
+            onChangeText={setEmail}
+            value={email}
+            keyboardType="email-address"
+          />
+        </View>
 
         <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
           <Text style={styles.buttonText}>Continuar</Text>
@@ -79,7 +92,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   title: {
-    fontSize: width * 0.1, 
+    fontSize: width * 0.1,
     fontWeight: 'bold',
     marginTop: height * 0.02,
   },
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
     color: '#000',
     borderBottomWidth: 1,
     borderBottomColor: '#8050C6',
-  },  
+  },
   button: {
     backgroundColor: 'purple',
     paddingVertical: 12,
