@@ -44,14 +44,18 @@ const LoginScreen = () => {
         return navigation.navigate('Main');
       })
       .catch((e) => {
-        alert(`${e.code == 401 ? e.response?.data.message : e.message}`);
+        alert(`${e.code == 401 ? e : e.response.data.message}`);
       });
   }
 
   const isValidEmail = (email) => {
     // Esta é uma função de validação de e-mail simples
     // Você pode implementar uma validação mais complexa conforme necessário
-    return /\S+@\S+\.\S+/.test(email);
+
+    if (/\S+@\S+\.\S+/.test(email))
+      return email;
+    else
+      return false;
   };
 
   return (

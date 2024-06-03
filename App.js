@@ -38,6 +38,7 @@ import LoginScreen from './screens/main/inicial/login/login'
 import VerifyEmailScreen from './screens/main/inicial/login/verifyEmail';
 import ForgotPasswordScreen from './screens/main/inicial/login/forgotPassword';
 import ResetPasswordScreen from './screens/main/inicial/login/resetPassword';
+import { navigationRef } from './config/RootNavigation';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -125,7 +126,7 @@ const MainTabs = () => (
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
         <Stack.Screen
           name="Loading"
@@ -154,6 +155,7 @@ const App = () => {
         /><Stack.Screen
           name="Login"
           component={LoginScreen}
+
           options={{ headerShown: false, tabBarVisible: false }}
         />
         <Stack.Screen

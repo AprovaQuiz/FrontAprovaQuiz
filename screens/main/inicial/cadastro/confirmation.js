@@ -172,7 +172,7 @@ const ConfirmationScreen = () => {
           }}
           onDismiss={() => {
             setTimeout(() => {
-              navigation.navigate('Home');
+              navigation.navigate('Login');
             }, 1000);
           }}
         >

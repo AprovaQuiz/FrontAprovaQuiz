@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
 import storage from "./storage";
-
+import { navigationRef } from "./RootNavigation";
 
 export const axiosAprovaApi = axios.create({
   baseURL: "https://aprovaquiz-rest-api-production.up.railway.app/",
@@ -9,9 +8,9 @@ export const axiosAprovaApi = axios.create({
 
 axiosAprovaApi.interceptors.request.use(
 
-  (config) => {
+  async (config) => {
 
-    storage.load({ key: 'access-token' })
+    await storage.load({ key: 'access-token' })
       .then(ret => {
         config.headers["Authorization"] = ret
       })
@@ -30,8 +29,12 @@ axiosAprovaApi.interceptors.response.use(
   },
   (error) => {
     if (error.response.status == 403) {
-      const navigation = useNavigation();
-      return navigation.navigate("Login");
+
+      if (navigationRef.isReady()) {
+        alert('Token Inválido ou Expirado\n Faça Login Novamente')
+        return navigationRef.navigate('Login');
+
+      }
     } else {
       return Promise.reject(error);
     }
