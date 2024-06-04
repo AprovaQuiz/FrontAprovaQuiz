@@ -5,7 +5,6 @@ import Cadernos from '../../components/cadernos/cardernosHome';
 import Noticias from '../../components/noticias/noticiasHome';
 
 import { Ionicons } from '@expo/vector-icons';
-import { axiosAprovaApi } from '../../config/http';
 
 const HomeContent = ({ navigation }) => {
   const goToCadernos = () => {
@@ -15,16 +14,6 @@ const HomeContent = ({ navigation }) => {
   const goToNoticias = () => {
     navigation.navigate('Notícias');
   };
-
-  /* useEffect(() => {
-    axiosAprovaApi.get('/users/myuser')
-      .then(() => {
-        console.log("deu certo")
-      })
-      .catch(e => {
-        console.log(e)
-      })
-  }, []) */
 
 
   return (

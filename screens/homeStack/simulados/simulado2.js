@@ -1,9 +1,10 @@
-import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Dropdown from '../../../components/home/simulado/Dropdown';
 import FloatingBubbles from '../../../components/home/simulado/bubble';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { axiosAprovaApi } from '../../../config/http';
 
 //não consegui trabalhar com os Wrappers para reaproveitar o TemplateScreen, só trocando se o Button ou Dropdown seria usado
 
@@ -16,12 +17,34 @@ const ViewBox = props => (
 const Simulado2 = ({ route }) => {
 
   const navigation = useNavigation();
-  const data = [
-    { label: 'Nenhum ', value: 'optionA' },
-    { label: 'Era Vargas', value: 'optionB' },
-    { label: 'Segundo Reinado', value: 'optionC' },
-    { label: 'Brasil Colônia', value: 'optionD' },
-  ];
+
+  const { subject } = route.params
+
+  const [topics, setTopics] = useState([{ nome: "Nenhum", _id: "default" }])
+
+  const handleGet = useCallback(async () => {
+
+    await axiosAprovaApi.get(`/subjects/topics/${subject}`)
+      .then(r => {
+
+        if (subject == "Nenhuma")
+          setTopics(topics.concat(r.data))
+        else
+          r.data.map((subject) => {
+            if (subject.topics)
+              return setTopics(topics.concat(subject.topics))
+          })
+
+      })
+      .catch(e => {
+        console.log(e)
+      })
+
+  }, [])
+
+  useEffect(() => {
+    handleGet()
+  }, [handleGet])
 
   const handleSelect = (item) => {
     navigation.navigate('Simulado3', { ...route.params, topic: item });
@@ -41,7 +64,7 @@ const Simulado2 = ({ route }) => {
       </View>
       <ViewBox style={styles.mainBox}>
         <Text style={styles.title}>Qual assunto você deseja?</Text>
-        <Dropdown style={styles.dropdownEstilo} data={data} onSelect={handleSelect} />
+        <Dropdown style={styles.dropdownEstilo} data={topics} onSelect={handleSelect} />
 
       </ViewBox>
     </View>

@@ -1,14 +1,13 @@
 // ScreenOne.js
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import TemplateScreen from '../../../components/home/simulado/TemplateScreen';
 import { useNavigation } from '@react-navigation/native';
+import { axiosAprovaApi } from '../../../config/http';
 
 const Simulado1 = () => {
   const navigation = useNavigation();
   const headerText = "De qual caderno você deseja fazer o simulado?";
-  const buttonColors = ['#C4A1F7', '#AB7AF2', '#915DDD', '#6034A0', '#431585'];
-  const buttonTexts = ['Nenhuma', 'História', 'Geografia', 'Matematica', 'Português', 'Fisica'];
-
+  const buttonColors = ['#C4A1F7', '#AB7AF2', '#915DDD', '#6034A0', '#431585', '#4b0082'];
   const [selectedText, setSelectedText] = useState("")
 
   const backPress = () => {
@@ -21,13 +20,34 @@ const Simulado1 = () => {
     }
   }, [selectedText])
 
+  const [subjects, setSubjects] = useState([{ nome: "Nenhuma", _id: "default" }])
+
+  const handleGet = useCallback(async () => {
+
+    await axiosAprovaApi.get(`/subjects`)
+      .then(r => {
+        setSubjects(subjects.concat(r.data))
+
+      })
+      .catch(e => {
+        console.log(e)
+      })
+
+  }, [])
+
+  useEffect(() => {
+    handleGet()
+  }, [handleGet])
+
 
   return (
     <TemplateScreen
       backPress={backPress}
       headerText={headerText}
       buttonColors={buttonColors}
-      buttonTexts={buttonTexts}
+      buttonTexts={subjects.map((subject => {
+        return subject.nome
+      }))}
       setText={setSelectedText}
     />
   );

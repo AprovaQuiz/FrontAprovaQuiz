@@ -21,6 +21,9 @@ const Simulado4 = ({ route }) => {
     navigation.goBack()
   }
 
+  // vo botar uma consulta, e salvar na memória local as questões
+  // aqui que sipa eu vou chorar
+
   return (
     <View style={styles.container}>
       <FloatingBubbles numBubbles={30} />

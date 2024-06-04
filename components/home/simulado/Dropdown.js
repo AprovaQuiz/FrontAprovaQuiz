@@ -11,6 +11,7 @@ const Dropdown = ({ data, onSelect }) => {
     setShowOptions(false);
   };
 
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -18,19 +19,19 @@ const Dropdown = ({ data, onSelect }) => {
         onPress={() => setShowOptions(!showOptions)}
       >
         <Text style={styles.dropdownButtonText}>
-          {selectedValue ? selectedValue.label : 'Selecione uma opção'}
+          {selectedValue ? selectedValue.nome : 'Selecione uma opção'}
         </Text>
       </TouchableOpacity>
       {showOptions && (
         <FlatList
           data={data}
-          keyExtractor={(item) => item.value}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.option}
-              onPress={() => handleSelect(item.label)} //toma cuidado com essa linha
+              onPress={() => handleSelect(item.nome)} //toma cuidado com essa linha
             >
-              <Text style={styles.optionText}>{item.label}</Text>
+              <Text style={styles.optionText}>{item.nome}</Text>
             </TouchableOpacity>
           )}
           style={styles.optionsList}
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#391173',
     elevation: 2,
     marginBottom: 20,
+    width: 220
   },
   option: {
     padding: 10,
