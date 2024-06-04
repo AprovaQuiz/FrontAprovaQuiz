@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Dropdown from '../../../components/home/simulado/Dropdown'; 
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import Dropdown from '../../../components/home/simulado/Dropdown';
 import FloatingBubbles from '../../../components/home/simulado/bubble';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,20 +13,10 @@ const ViewBox = props => (
   </View>
 );
 
-const Simulado4 = () => {
+const Simulado4 = ({ route }) => {
   const navigation = useNavigation();
-  const data = [
-    { label: 'Nenhum específico', value: 'optionA' },
-    { label: 'Era Vargas', value: 'optionB' },
-    { label: 'Segundo Reinado', value: 'optionC' },
-    { label: 'Brasil Colônia', value: 'optionD' },
-  ];
 
-  const handleSelect = (item) => {
-    alert('Simulado4 Selected Item: ', item);
-    navigation.navigate('Simulado5');
-  };
-  
+  console.log(route.params)
   const backPress = () => {
     navigation.goBack()
   }
@@ -35,17 +25,18 @@ const Simulado4 = () => {
     <View style={styles.container}>
       <FloatingBubbles numBubbles={30} />
       <View style={styles.header}>
-      <TouchableOpacity onPress={backPress}>
-        <Ionicons name="arrow-back" size={24} color="#FFF" />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={backPress}>
+          <Ionicons name="arrow-back" size={24} color="#FFF" />
+        </TouchableOpacity>
       </View>
       <ViewBox style={styles.mainBox}>
-        <Text style={styles.title}>Qual assunto você deseja?</Text>
-        <Dropdown style={styles.dropdownEstilo}data={data} onSelect={handleSelect} />
-      
+        <Text style={styles.title}>Estamos carregando seu simulado</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#8A45ED" />
+        </View>
       </ViewBox>
     </View>
-    
+
   );
 };
 
@@ -60,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
   },
-  title:{
+  title: {
     color: '#8A45ED',
     fontSize: 24,
     alignSelf: 'center',
@@ -72,9 +63,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   mainBox: {
-    flexShrink: 'none',
+    flexShrink: 0,
     minWidth: 300,
-    minHeight: 180,
+    minHeight: 200,
     borderRadius: 20,
     alignItems: 'center',
   },

@@ -22,12 +22,7 @@ import AssuntosListagem from './screens/cadernosStack/assuntosLista';
 import CadernosListaQuestoes from './screens/cadernosStack/cadernosListaQuestoes';
 import QuestaoScreenCadernos from './screens/cadernosStack/questaoCadernos';
 import Conclusao from './screens/cadernosStack/conclusaoAssunto';
-import Simulado1 from './screens/homeStack/simulados/simulado1';
-import Simulado2 from './screens/homeStack/simulados/simulado2';
-import Simulado3 from './screens/homeStack/simulados/simulado3';
-import Simulado4 from './screens/homeStack/simulados/simulado4';
-import Simulado5 from './screens/homeStack/simulados/simulado5';
-import Simulado6 from './screens/homeStack/simulados/simulado6';
+
 
 
 import LoadingScreen from './screens/main/inicial/loading';
@@ -39,6 +34,10 @@ import VerifyEmailScreen from './screens/main/inicial/login/verifyEmail';
 import ForgotPasswordScreen from './screens/main/inicial/login/forgotPassword';
 import ResetPasswordScreen from './screens/main/inicial/login/resetPassword';
 import { navigationRef } from './config/RootNavigation';
+import Simulado1 from './screens/homeStack/simulados/simulado1';
+import Simulado2 from './screens/homeStack/simulados/simulado2';
+import Simulado3 from './screens/homeStack/simulados/simulado3';
+import Simulado4 from './screens/homeStack/simulados/simulado4';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,8 +55,6 @@ const HomeStack = () => (
     <Stack.Screen name="Simulado2" component={Simulado2} options={{ headerShown: false }} />
     <Stack.Screen name="Simulado3" component={Simulado3} options={{ headerShown: false }} />
     <Stack.Screen name="Simulado4" component={Simulado4} options={{ headerShown: false }} />
-    <Stack.Screen name="Simulado5" component={Simulado5} options={{ headerShown: false }} />
-    <Stack.Screen name="Simulado6" component={Simulado6} options={{ headerShown: false }} />
   </Stack.Navigator>
 );
 

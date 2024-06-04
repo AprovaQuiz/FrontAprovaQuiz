@@ -6,15 +6,15 @@ const { width, height } = Dimensions.get('window');
 
 const CustomCard = () => {
   const navigation = useNavigation();
-  
+
   // Função para gerar um número aleatório entre um intervalo
   const getRandomNumber = (min, max) => {
     return Math.random() * (max - min) + min;
   };
 
-  
+
   const goToSimulados = () => {
-    navigation.navigate('Simulado1'); 
+    navigation.navigate('Simulado1');
   };
 
   // Posições aleatórias para as bolas
@@ -47,21 +47,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     marginHorizontal: 10,
   },
   card: {
-    width: "100%", 
+    width: "100%",
     height: 165,
     borderRadius: 20,
     backgroundColor: '#8A45ED',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 10, 
+    marginHorizontal: 10,
     marginBottom: 20,
     padding: 10,
     borderBottomWidth: 4,
-    borderBottomColor: '#3C1673', 
+    borderBottomColor: '#3C1673',
   },
   circle: {
     position: 'absolute',
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   textAndButtonContainer: {
-    alignItems: 'flex-start', 
-    paddingLeft: 10, 
+    alignItems: 'flex-start',
+    paddingLeft: 10,
   },
   title: {
     color: '#FFFFFF',

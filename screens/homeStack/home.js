@@ -16,7 +16,7 @@ const HomeContent = ({ navigation }) => {
     navigation.navigate('Notícias');
   };
 
-  useEffect(() => {
+  /* useEffect(() => {
     axiosAprovaApi.get('/users/myuser')
       .then(() => {
         console.log("deu certo")
@@ -24,7 +24,7 @@ const HomeContent = ({ navigation }) => {
       .catch(e => {
         console.log(e)
       })
-  }, [])
+  }, []) */
 
 
   return (

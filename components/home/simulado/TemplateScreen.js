@@ -11,20 +11,18 @@ const ViewBox = (props) => (
   </View>
 );
 
-const TemplateScreen = ({
-  headerText,
-  buttonColors,
-  buttonTexts,
-  buttonOnPressHandlers,
-  backPress,
-}) => {
+function TemplateScreen({
+  headerText, buttonColors, buttonTexts, backPress, setText
+}) {
+
+
   return (
     <View style={styles.containerView}>
       <FloatingBubbles numBubbles={30} />
       <View style={styles.header}>
-      <TouchableOpacity onPress={backPress}>
-        <Ionicons name="arrow-back" size={24} color="#FFF" />
-      </TouchableOpacity>
+        <TouchableOpacity onPress={backPress}>
+          <Ionicons name="arrow-back" size={24} color="#FFF" />
+        </TouchableOpacity>
       </View>
       <ViewBox style={styles.mainBox}>
         <Text style={styles.titulo}>{headerText}</Text>
@@ -33,13 +31,12 @@ const TemplateScreen = ({
             key={index}
             text={text}
             color={buttonColors[index]}
-            onPress={buttonOnPressHandlers[index]}
-          />
+            onPress={() => setText(text)} />
         ))}
       </ViewBox>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   containerView: {
@@ -49,7 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mainBox: {
-    flexShrink: 'none',
+    flexShrink: 0,
     minWidth: 300,
     minHeight: 250,
     borderRadius: 20,

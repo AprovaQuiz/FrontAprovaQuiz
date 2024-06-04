@@ -1,61 +1,91 @@
-// ScreenOne.js
 import React from 'react';
-import TemplateScreen from '../../../components/home/simulado/TemplateScreen';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Dropdown from '../../../components/home/simulado/Dropdown';
+import FloatingBubbles from '../../../components/home/simulado/bubble';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
-const Simulado2 = () => {
+//não consegui trabalhar com os Wrappers para reaproveitar o TemplateScreen, só trocando se o Button ou Dropdown seria usado
+
+const ViewBox = props => (
+  <View style={[props.style, { backgroundColor: 'white' }]}>
+    {props.children}
+  </View>
+);
+
+const Simulado2 = ({ route }) => {
+
   const navigation = useNavigation();
-  const headerText = "De qual caderno você deseja fazer o simulado?";
-  const buttonColors = ['#C4A1F7', '#AB7AF2', '#915DDD', '#6034A0', '#431585'];
-  const buttonTexts = ['História', 'Geografia', 'Matematica', 'Português', 'Fisica'];
-
-  //esses Alert são placeholders, n precisa mexer
-  const handlePress1 = () => {
-    alert('Botão de 1 foi pressionado');
-    navigation.navigate('Simulado3');
-  };
-
-  const handlePress2 = () => {
-    alert('Botão de 2 foi pressionado');
-    navigation.navigate('Simulado3');
-  };
-
-  const handlePress3 = () => {
-    alert('Botão de 3 foi pressionado');
-    navigation.navigate('Simulado3');
-  };
-
-  const handlePress4 = () => {
-    alert('Botão de 4 foi pressionado');
-    navigation.navigate('Simulado3');
-  };
-
-  const handlePress5 = () => {
-    alert('Botão de 5 foi pressionado');
-    navigation.navigate('Simulado3');
-  };
-
-  const buttonOnPressHandlers = [
-    handlePress1,
-    handlePress2,
-    handlePress3,
-    handlePress4,
-    handlePress5,
+  const data = [
+    { label: 'Nenhum ', value: 'optionA' },
+    { label: 'Era Vargas', value: 'optionB' },
+    { label: 'Segundo Reinado', value: 'optionC' },
+    { label: 'Brasil Colônia', value: 'optionD' },
   ];
-  
+
+  const handleSelect = (item) => {
+    navigation.navigate('Simulado3', { ...route.params, topic: item });
+  };
+
   const backPress = () => {
     navigation.goBack()
   }
 
   return (
-    <TemplateScreen
-      backPress={backPress}
-      headerText={headerText}
-      buttonColors={buttonColors}
-      buttonTexts={buttonTexts}
-      buttonOnPressHandlers={buttonOnPressHandlers}
-    />
+    <View style={styles.container}>
+      <FloatingBubbles numBubbles={30} />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={backPress}>
+          <Ionicons name="arrow-back" size={24} color="#FFF" />
+        </TouchableOpacity>
+      </View>
+      <ViewBox style={styles.mainBox}>
+        <Text style={styles.title}>Qual assunto você deseja?</Text>
+        <Dropdown style={styles.dropdownEstilo} data={data} onSelect={handleSelect} />
+
+      </ViewBox>
+    </View>
+
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  dropdownEstilo: {
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  title: {
+    color: '#8A45ED',
+    fontSize: 24,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 20,
+    maxWidth: 300,
+    marginBottom: 40,
+    marginHorizontal: 15,
+  },
+  mainBox: {
+    flexShrink: 0,
+    minWidth: 300,
+    minHeight: 180,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    position: 'absolute',
+    top: 30,
+    left: 20,
+  },
+});
 
 export default Simulado2;
