@@ -1,11 +1,11 @@
-import React from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Dropdown from '../../../components/home/simulado/Dropdown';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import FloatingBubbles from '../../../components/home/simulado/bubble';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { axiosAprovaApi } from '../../../config/http';
+import storage from '../../../config/storage';
 
-//não consegui trabalhar com os Wrappers para reaproveitar o TemplateScreen, só trocando se o Button ou Dropdown seria usado
 
 const ViewBox = props => (
   <View style={[props.style, { backgroundColor: 'white' }]}>
@@ -21,8 +21,27 @@ const Simulado4 = ({ route }) => {
     navigation.goBack()
   }
 
-  // vo botar uma consulta, e salvar na memória local as questões
-  // aqui que sipa eu vou chorar
+  const paramsQuestions = route.params
+
+  const handleGet = useCallback(async () => {
+
+    await axiosAprovaApi.get(`/questions/generateQuiz/${paramsQuestions.subject}/${paramsQuestions.topic}/${paramsQuestions.questionCount}`)
+      .then(r => {
+
+        storage.save({ key: 'questions', data: r.data })
+        console.log(r.request)
+        // return navigation.navigate('AlgumaTela')
+      })
+      .catch(e => {
+        console.log(e)
+      })
+
+  }, [])
+
+  useEffect(() => {
+    handleGet()
+  }, [handleGet])
+
 
   return (
     <View style={styles.container}>
