@@ -27,10 +27,14 @@ const Simulado4 = ({ route }) => {
 
     await axiosAprovaApi.get(`/questions/generateQuiz/${paramsQuestions.subject}/${paramsQuestions.topic}/${paramsQuestions.questionCount}`)
       .then(r => {
-
-        storage.save({ key: 'questions', data: r.data })
-        console.log(r.request)
-        // return navigation.navigate('AlgumaTela')
+        if (r.data != null) {
+          storage.save({ key: 'questions', data: r.data })
+          console.log(r.request)
+          // return navigation.navigate('AlgumaTela')
+        } else {
+          alert('Erro\nNão foram encontradas Questões,\nVoltando para Home...')
+          return navigation.navigate('Home')
+        }
       })
       .catch(e => {
         console.log(e)
