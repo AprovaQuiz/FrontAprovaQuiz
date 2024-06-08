@@ -38,6 +38,9 @@ import Simulado1 from './screens/homeStack/simulados/simulado1';
 import Simulado2 from './screens/homeStack/simulados/simulado2';
 import Simulado3 from './screens/homeStack/simulados/simulado3';
 import Simulado4 from './screens/homeStack/simulados/simulado4';
+import QuestaoSimuladoScreen from './screens/homeStack/simulados/questaoSimulado';
+import ConclusaoSimulado from './screens/homeStack/simulados/conclusao';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,6 +58,9 @@ const HomeStack = () => (
     <Stack.Screen name="Simulado2" component={Simulado2} options={{ headerShown: false }} />
     <Stack.Screen name="Simulado3" component={Simulado3} options={{ headerShown: false }} />
     <Stack.Screen name="Simulado4" component={Simulado4} options={{ headerShown: false }} />
+    <Stack.Screen name="QuestaoSimulado" component={QuestaoSimuladoScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="ConclusaoSimulado" component={ConclusaoSimulado} options={{ headerShown: false }} />
+
   </Stack.Navigator>
 );
 

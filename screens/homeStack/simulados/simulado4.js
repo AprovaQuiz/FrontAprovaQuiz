@@ -16,7 +16,6 @@ const ViewBox = props => (
 const Simulado4 = ({ route }) => {
   const navigation = useNavigation();
 
-  console.log(route.params)
   const backPress = () => {
     navigation.goBack()
   }
@@ -28,12 +27,17 @@ const Simulado4 = ({ route }) => {
     await axiosAprovaApi.get(`/questions/generateQuiz/${paramsQuestions.subject}/${paramsQuestions.topic}/${paramsQuestions.questionCount}`)
       .then(r => {
         if (r.data != null) {
+
           storage.save({ key: 'questions', data: r.data })
-          console.log(r.request)
-          // return navigation.navigate('AlgumaTela')
+          return navigation.navigate('QuestaoSimulado', {
+            index: 0
+          })
+
         } else {
+
           alert('Erro\nNão foram encontradas Questões,\nVoltando para Home...')
           return navigation.navigate('Home')
+
         }
       })
       .catch(e => {
