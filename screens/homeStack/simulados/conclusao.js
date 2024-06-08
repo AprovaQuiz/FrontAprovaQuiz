@@ -33,7 +33,8 @@ const ConclusaoSimulado = ({ navigation }) => {
                     <TouchableOpacity
                         style={styles.modalButton}
                         onPress={() => {
-                            navigation.navigate('Histórico');
+                            navigation.navigate('Home')
+                            return navigation.navigate('Histórico');
                         }}
                     >
                         <Text style={styles.modalButtonText}>Finalizar</Text>

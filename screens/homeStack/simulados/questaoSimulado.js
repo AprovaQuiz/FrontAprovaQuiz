@@ -11,35 +11,31 @@ import storage from '../../../config/storage';
 import QuestaoSimulado from '../../../components/Simulado/cadernoQuestao';
 
 
-const QuestaoSimuladoScreen = () => {
+const QuestaoSimuladoScreen = ({ route }) => {
     const navigation = useNavigation();
-    const route = useRoute();
+
     const questionsParams = route.params;
 
     const [question, setQuestion] = useState({})
     const [questionsLength, setQuestionLength] = useState(0)
 
+    storage.load(
+        { key: 'questions' }
+    )
+        .then(ret => {
+            setQuestion(ret[questionsParams.index])
+            setQuestionLength(ret.length)
 
+        })
+        .catch(e => {
+            console.log(e)
+        })
 
-    const handleGet = useCallback(async () => {
-        await storage.load(
-            { key: 'questions' }
-        )
-            .then(ret => {
-                setQuestion(ret[questionsParams.index])
-                setQuestionLength(ret.length)
-
-            })
-            .catch(e => {
-                console.log(e)
-            })
-
-    }, [])
-
-    useEffect(() => {
-        handleGet()
-    }, [handleGet])
-
+    function backScreen() {
+        return navigation.navigate('QuestaoSimulado', {
+            index: questionsParams.index - 1
+        })
+    }
 
 
     return (
@@ -58,7 +54,9 @@ const QuestaoSimuladoScreen = () => {
                 <View style={styles.navigationButtons}>
                     {questionsParams.index != 0 &&
                         <TouchableOpacity
+                            onPress={() => { backScreen() }}
                             style={styles.navigationButton}>
+
                             <Ionicons
                                 name="arrow-back-circle-outline"
                                 size={36}
@@ -67,15 +65,7 @@ const QuestaoSimuladoScreen = () => {
                         </TouchableOpacity>
 
                     }
-                    {/*                     <TouchableOpacity
-                        style={styles.navigationButton}
-                        onPress={navigateToNext}>
-                        <Ionicons
-                            name="arrow-forward-circle-outline"
-                            size={36}
-                            color="#3C1673"
-                        />
-                    </TouchableOpacity> */}
+
                 </View>
             </View>
         </ScrollView>

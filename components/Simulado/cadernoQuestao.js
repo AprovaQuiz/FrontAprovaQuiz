@@ -17,6 +17,7 @@ const QuestaoSimulado = ({ questao, length, currentIndex }) => {
   const selecionarResposta = (index) => {
     setRespostaSelecionada(index);
 
+    //é por aqui que vo criar o historico
     if (currentIndex < length - 1)
       return navigation.navigate('QuestaoSimulado', {
         index: currentIndex + 1
