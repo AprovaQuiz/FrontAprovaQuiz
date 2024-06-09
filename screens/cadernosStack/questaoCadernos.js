@@ -12,7 +12,7 @@ import QuestaoVestibular from '../../components/cadernos/cadernoQuestao';
 const QuestaoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { questao, assuntoNome } = route.params;
+  const { questao } = route.params;
 
   const navigateToConclusao = () => {
     navigation.navigate('Conclusao');

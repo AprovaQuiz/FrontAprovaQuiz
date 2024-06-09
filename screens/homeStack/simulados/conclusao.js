@@ -5,7 +5,9 @@ import storage from '../../../config/storage';
 
 const { width, height } = Dimensions.get('window');
 
-const ConclusaoSimulado = ({ navigation }) => {
+const ConclusaoSimulado = ({ navigation, route }) => {
+
+    console.log(route.params)
 
     useEffect(() => {
         storage.remove({ key: 'questions' })

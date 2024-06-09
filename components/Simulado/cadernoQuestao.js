@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   View,
@@ -12,18 +12,49 @@ const QuestaoSimulado = ({ questao, length, currentIndex }) => {
   const { enunciado, alternativas, pergunta } = questao;
   const [respostaSelecionada, setRespostaSelecionada] = useState(null);
   const navigation = useNavigation();
-
+  const route = useRoute();
+  const params = route.params
 
   const selecionarResposta = (index) => {
     setRespostaSelecionada(index);
 
-    //é por aqui que vo criar o historico
-    if (currentIndex < length - 1)
-      return navigation.navigate('QuestaoSimulado', {
-        index: currentIndex + 1
-      })
+    const answers = [{
+      questao: questao._id,
+      respRegistrada: index,
+      index: currentIndex
+    }]
+
+
+    const handleQuestions = params.questions ? params.questions : null;
+    if (currentIndex < length - 1) {
+
+      if (params.questions && typeof params.questions[currentIndex] !== 'undefined') {
+        const auxParams = params.questions;
+
+        auxParams[currentIndex] = {
+          questao: questao._id,
+          respRegistrada: index,
+          index: currentIndex
+        }
+
+        return navigation.navigate('QuestaoSimulado', {
+          index: currentIndex + 1,
+          questions: auxParams
+        })
+
+      } else {
+
+        return navigation.navigate('QuestaoSimulado', {
+          index: currentIndex + 1,
+          questions: handleQuestions == null ? answers : handleQuestions.concat(answers)
+        })
+      }
+
+    }
     else {
-      return navigation.navigate('ConclusaoSimulado');
+      return navigation.navigate('ConclusaoSimulado', {
+        questions: handleQuestions.concat(answers)
+      });
     }
   };
 

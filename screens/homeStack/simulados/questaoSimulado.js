@@ -33,7 +33,8 @@ const QuestaoSimuladoScreen = ({ route }) => {
 
     function backScreen() {
         return navigation.navigate('QuestaoSimulado', {
-            index: questionsParams.index - 1
+            index: questionsParams.index - 1,
+            questions: questionsParams.questions
         })
     }
 
