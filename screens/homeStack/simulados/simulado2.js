@@ -6,8 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { axiosAprovaApi } from '../../../config/http';
 
-//não consegui trabalhar com os Wrappers para reaproveitar o TemplateScreen, só trocando se o Button ou Dropdown seria usado
-
 const ViewBox = props => (
   <View style={[props.style, { backgroundColor: 'white' }]}>
     {props.children}
@@ -20,14 +18,16 @@ const Simulado2 = ({ route }) => {
 
   const { subject } = route.params
 
+  console.log(subject)
+
   const [topics, setTopics] = useState([{ nome: "Nenhum", _id: "default" }])
 
   const handleGet = useCallback(async () => {
 
-    await axiosAprovaApi.get(`/subjects/topics/${subject}`)
+    await axiosAprovaApi.get(`/subjects/topics/${subject.nome}`)
       .then(r => {
-
-        if (subject == "Nenhuma")
+        console.log(r.data)
+        if (subject.nome == "Nenhuma")
           setTopics(topics.concat(r.data))
         else
           r.data.map((subject) => {

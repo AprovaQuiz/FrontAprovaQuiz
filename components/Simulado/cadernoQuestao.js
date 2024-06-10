@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,17 +13,24 @@ const QuestaoSimulado = ({ questao, length, currentIndex }) => {
   const [respostaSelecionada, setRespostaSelecionada] = useState(null);
   const navigation = useNavigation();
   const route = useRoute();
-  const params = route.params
+  const params = route.params;
+
+
+  useEffect(() => {
+    if (params.questions && typeof params.questions[currentIndex] !== 'undefined') {
+      setRespostaSelecionada(params.questions[currentIndex].respRegistrada)
+    } else {
+      setRespostaSelecionada(null)
+    }
+  }, [route.params])
 
   const selecionarResposta = (index) => {
-    setRespostaSelecionada(index);
 
     const answers = [{
       questao: questao._id,
       respRegistrada: index,
       index: currentIndex
     }]
-
 
     const handleQuestions = params.questions ? params.questions : null;
     if (currentIndex < length - 1) {
@@ -57,6 +64,7 @@ const QuestaoSimulado = ({ questao, length, currentIndex }) => {
       });
     }
   };
+
 
 
   return (

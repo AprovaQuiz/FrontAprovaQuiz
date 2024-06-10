@@ -23,7 +23,7 @@ const QuestaoSimuladoScreen = ({ route }) => {
         { key: 'questions' }
     )
         .then(ret => {
-            setQuestion(ret[questionsParams.index])
+            setQuestion(ret.questions[questionsParams.index])
             setQuestionLength(ret.length)
 
         })

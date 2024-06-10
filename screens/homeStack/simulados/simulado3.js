@@ -8,14 +8,14 @@ const Simulado3 = ({ route }) => {
   const buttonColors = ['#AB7AF2', '#915DDD', '#6034A0', '#431585'];
   const buttonTexts = ['Até 15', 'Até 20', 'Até 25', 'Até 30'];
 
-  const [selectedText, setSelectedText] = useState("")
+  const [selectedText, setSelectedText] = useState()
 
   const backPress = () => {
     navigation.goBack()
   }
 
   useEffect(() => {
-    if (selectedText != "") {
+    if (selectedText != null) {
       const onlyNumber = Number(selectedText.replace(/\D/g, ""));
       navigation.navigate('Simulado4', { ...route.params, questionCount: onlyNumber })
     }

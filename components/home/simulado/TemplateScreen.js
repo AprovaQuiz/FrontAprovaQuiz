@@ -26,13 +26,27 @@ function TemplateScreen({
       </View>
       <ViewBox style={styles.mainBox}>
         <Text style={styles.titulo}>{headerText}</Text>
-        {buttonTexts.map((text, index) => (
-          <CustomButton
-            key={index}
-            text={text}
-            color={buttonColors[index]}
-            onPress={() => setText(text)} />
-        ))}
+        {headerText != "Qual a quantidade de questões você deseja?" ?
+          buttonTexts.map((subject, index) => (
+            <CustomButton
+              key={index}
+              text={subject.nome}
+              color={buttonColors[index]}
+              onPress={() => setText({
+                nome: subject.nome,
+                _id: subject._id
+              })}
+            />
+          ))
+          :
+          buttonTexts.map((text, index) => (
+            <CustomButton
+              key={index}
+              text={text}
+              color={buttonColors[index]}
+              onPress={() => setText(text)} />
+          ))
+        }
       </ViewBox>
     </View>
   );

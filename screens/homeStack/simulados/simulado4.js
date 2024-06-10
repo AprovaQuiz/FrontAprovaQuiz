@@ -22,13 +22,15 @@ const Simulado4 = ({ route }) => {
 
   const paramsQuestions = route.params
 
+  console.log(route.params)
+
   const handleGet = useCallback(async () => {
 
-    await axiosAprovaApi.get(`/questions/generateQuiz/${paramsQuestions.subject}/${paramsQuestions.topic}/${paramsQuestions.questionCount}`)
+    await axiosAprovaApi.get(`/questions/generateQuiz/${paramsQuestions.subject.nome}/${paramsQuestions.topic.nome}/${paramsQuestions.questionCount}`)
       .then(r => {
         if (r.data != null) {
 
-          storage.save({ key: 'questions', data: r.data })
+          storage.save({ key: 'questions', data: { questions: r.data } })
           return navigation.navigate('QuestaoSimulado', {
             index: 0
           })
