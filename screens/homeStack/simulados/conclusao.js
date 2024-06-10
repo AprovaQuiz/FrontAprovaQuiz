@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import storage from '../../../config/storage';
@@ -9,9 +9,14 @@ const ConclusaoSimulado = ({ navigation, route }) => {
 
     console.log(route.params)
 
-    useEffect(() => {
+
+    function handleHistoric() {
+
+        // Aqui vo botar a lógica do historic
         storage.remove({ key: 'questions' })
-    }, [])
+        navigation.navigate('Home')
+        return navigation.navigate('Histórico');
+    }
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -35,8 +40,7 @@ const ConclusaoSimulado = ({ navigation, route }) => {
                     <TouchableOpacity
                         style={styles.modalButton}
                         onPress={() => {
-                            navigation.navigate('Home')
-                            return navigation.navigate('Histórico');
+                            handleHistoric()
                         }}
                     >
                         <Text style={styles.modalButtonText}>Finalizar</Text>

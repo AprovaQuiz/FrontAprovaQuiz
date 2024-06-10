@@ -24,7 +24,7 @@ const QuestaoSimuladoScreen = ({ route }) => {
     )
         .then(ret => {
             setQuestion(ret.questions[questionsParams.index])
-            setQuestionLength(ret.length)
+            setQuestionLength(ret.questions.length)
 
         })
         .catch(e => {

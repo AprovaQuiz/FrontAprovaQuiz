@@ -33,6 +33,7 @@ const QuestaoSimulado = ({ questao, length, currentIndex }) => {
     }]
 
     const handleQuestions = params.questions ? params.questions : null;
+
     if (currentIndex < length - 1) {
 
       if (params.questions && typeof params.questions[currentIndex] !== 'undefined') {

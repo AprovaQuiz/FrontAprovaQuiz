@@ -30,7 +30,13 @@ const Simulado4 = ({ route }) => {
       .then(r => {
         if (r.data != null) {
 
-          storage.save({ key: 'questions', data: { questions: r.data } })
+          storage.save({
+            key: 'questions', data: {
+              questions: r.data,
+              id_Topic: paramsQuestions.topic._id,
+              id_Subject: paramsQuestions.subject._id
+            }
+          })
           return navigation.navigate('QuestaoSimulado', {
             index: 0
           })
