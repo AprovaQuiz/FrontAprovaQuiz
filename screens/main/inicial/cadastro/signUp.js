@@ -102,9 +102,8 @@ const SignUpScreen = () => {
         </View>
 
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Data de nascimento</Text>
-          <TextInputMask
-            type={'datetime'}
+          <Text style={styles.label}>Data de nacimento</Text>
+          <TextInputMaskr
             options={{
               format: 'DD/MM/YYYY',
             }}
