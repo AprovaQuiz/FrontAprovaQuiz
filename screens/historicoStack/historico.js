@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   FlatList,
@@ -12,19 +12,39 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import HistoricoItem from '../../components/historico/historicoItem';
 import Filtro from '../../components/historico/filtros';
-import historicoData from '../../data/historicoData';
 import { useNavigation } from '@react-navigation/native';
+import { axiosAprovaApi } from '../../config/http';
+import storage from '../../config/storage';
 
 const Historico = () => {
   const navigation = useNavigation();
+  storage.remove({ key: 'questions' })
 
   const navigateToHome = () => {
     navigation.navigate('Home');
   };
-  
+
   const navigateToPesquisa = () => {
-    navigation.navigate('Pesquisa'); 
+    navigation.navigate('Pesquisa');
   };
+
+
+  const [historic, setHistoric] = useState({});
+  const handleGet = useCallback(async () => {
+
+    await axiosAprovaApi.get(`/historics/myHistorics`)
+      .then(r => {
+        setHistoric(r.data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+
+  }, [])
+
+  useEffect(() => {
+    handleGet()
+  }, [handleGet])
 
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -58,19 +78,23 @@ const Historico = () => {
         </View>
         <Filtro />
         <FlatList
-          data={historicoData}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleItemPress(item)}>
-              <HistoricoItem
-                titulo={item.titulo}
-                cadernos={item.cadernos}
-                assuntos={item.assuntos}
-                realizadoEm={item.realizadoEm}
-                imagemUrl={item.imagemUrl}
-              />
-            </TouchableOpacity>
-          )}
+          data={historic}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item }) => {
+            const date = new Date(item.createdAt)
+            return (
+              <TouchableOpacity onPress={() => handleItemPress(item)}>
+                <HistoricoItem
+                  id={item._id}
+                  assunto={item.tipoSimulado?.assunto?.nome != undefined ? item.tipoSimulado?.assunto?.nome : "Geral"}
+                  materia={item.tipoSimulado?.materia?.nome != undefined ? item.tipoSimulado?.materia?.nome : "Geral"}
+                  pertence={item.tipoSimulado?.materia?.pertence != undefined ? item.tipoSimulado?.materia?.pertence : "Simulado Geral"}
+                  questoesLength={item.questoesFeitas.length}
+                  realizadoEm={"Realizado em: " + date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()}
+                />
+              </TouchableOpacity>
+            )
+          }}
         />
 
         <Modal
@@ -87,15 +111,18 @@ const Historico = () => {
               </TouchableOpacity>
               <View style={styles.modalHeader}>
                 <Image
-                  source={{ uri: selectedItem?.imagemUrl }}
+                  source={{ uri: "https://www.hostinger.com.br/tutoriais/wp-content/uploads/sites/12/2023/05/teste-em-producao.webp" }}
                   style={styles.modalImage}
                 />
                 <View style={styles.modalInfo}>
-                  <Text style={styles.modalTitle}>{selectedItem?.titulo}</Text>
-                  <Text style={styles.modalText}>{selectedItem?.cadernos}</Text>
-                  <Text style={styles.modalText}>{selectedItem?.assuntos}</Text>
+                  <Text style={styles.modalTitle}>{selectedItem?.tipoSimulado?.materia?.pertence != undefined ? selectedItem.tipoSimulado?.materia?.pertence : "Geral"}</Text>
+                  <Text style={styles.modalText}>{selectedItem?.tipoSimulado?.materia?.nome != undefined ? selectedItem.tipoSimulado?.materia?.nome : "Geral"}</Text>
+                  <Text style={styles.modalText}>{selectedItem?.tipoSimulado?.assunto?.nome != undefined ? selectedItem.tipoSimulado?.assunto?.nome : "Geral"}</Text>
                   <Text style={styles.modalDate}>
-                    Realizado em: {selectedItem?.realizadoEm}
+                    {() => {
+                      const date = new Date(item.createdAt)
+                      return "Realizado em: " + date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+                    }}
                   </Text>
                 </View>
               </View>
@@ -106,8 +133,7 @@ const Historico = () => {
                   color="#50B06B"
                 />
                 <Text>
-                  Número de <Text style={styles.acertosText}>acertos</Text>: 5
-                  questões
+                  Número de <Text style={styles.acertosText}>acertos</Text>: {selectedItem?.qtdDeAcertos} questões
                 </Text>
               </View>
               <View style={styles.questoes}>
@@ -117,8 +143,7 @@ const Historico = () => {
                   color="#F41A1A"
                 />
                 <Text>
-                  Número de <Text style={styles.errosText}>erros</Text>: 11
-                  questões
+                  Número de <Text style={styles.errosText}>erros</Text>: {selectedItem?.qtdDeErros} questões
                 </Text>
               </View>
               <TouchableOpacity

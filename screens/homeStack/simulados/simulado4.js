@@ -22,8 +22,6 @@ const Simulado4 = ({ route }) => {
 
   const paramsQuestions = route.params
 
-  console.log(route.params)
-
   const handleGet = useCallback(async () => {
 
     await axiosAprovaApi.get(`/questions/generateQuiz/${paramsQuestions.subject.nome}/${paramsQuestions.topic.nome}/${paramsQuestions.questionCount}`)

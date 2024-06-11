@@ -1,28 +1,46 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { axiosAprovaApi } from '../../config/http';
+import { useNavigation } from '@react-navigation/native';
 
-const HistoricoItem = ({ titulo, cadernos, assuntos, realizadoEm, imagemUrl }) => {
+const HistoricoItem = ({ questoesLength, materia, assunto, realizadoEm, pertence, id }) => {
+
+  const navigation = useNavigation();
+
+  async function handleDelete(id) {
+    await axiosAprovaApi.delete(`/historics/${id}`)
+      .then(() => {
+        alert('Deletado com Sucesso!')
+        navigation.reset({
+          routes: [{ name: 'Histórico' }],
+        });
+      })
+      .catch((e) => {
+        console.log(e)
+        alert('Algum erro aconteceu')
+      })
+  }
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.imageContainer}>
-          <Image 
-            source={{ uri: imagemUrl }}
+          <Image
+            source={{ uri: "https://www.hostinger.com.br/tutoriais/wp-content/uploads/sites/12/2023/05/teste-em-producao.webp" }}
             style={styles.image}
           />
           <View style={styles.infoBadge}>
-            <Text style={styles.infoText}>16qs</Text>
+            <Text style={styles.infoText}>{questoesLength}qs</Text>
           </View>
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.title}>{titulo}</Text>
-          <Text style={styles.subtitle}>{cadernos}</Text>
-          <Text style={styles.subtitle}>{assuntos}</Text>
-          <Text style={styles.date}>Realizado em: {realizadoEm}</Text>
+          <Text style={styles.title}>{pertence}</Text>
+          <Text style={styles.subtitle}>{materia}</Text>
+          <Text style={styles.subtitle}>{assunto}</Text>
+          <Text style={styles.date}>{realizadoEm}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.deleteButton}>
+      <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(id)}>
         <FontAwesome name="trash" size={20} color="#8A45ED" />
       </TouchableOpacity>
     </View>

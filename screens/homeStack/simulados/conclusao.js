@@ -2,20 +2,74 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import storage from '../../../config/storage';
+import { axiosAprovaApi } from '../../../config/http';
+
 
 const { width, height } = Dimensions.get('window');
 
 const ConclusaoSimulado = ({ navigation, route }) => {
 
-    console.log(route.params)
 
 
-    function handleHistoric() {
+    async function handleHistoric() {
+        const questionsAnswered = route.params.questions
+        let qtdDeAcertos = 0
+        let qtdDeErros = 0
 
-        // Aqui vo botar a lógica do historic
+        await storage.load({ key: 'questions' })
+            .then(async (ret) => {
+
+                const auxQuestions = []
+
+                questionsAnswered.map((e, index) => {
+                    let acerto = null
+                    if (e.respRegistrada == ret.questions[index].alternativaCorreta) {
+                        qtdDeAcertos++;
+                        acerto = true;
+
+                    } else {
+                        qtdDeErros++;
+                        acerto = false;
+                    }
+
+                    return auxQuestions.push({
+                        questao: e.questao,
+                        respRegistrada: e.respRegistrada,
+                        acerto: acerto
+                    })
+                })
+
+                await axiosAprovaApi.post('/historics', {
+                    questoesFeitas: auxQuestions,
+                    qtdDeAcertos: qtdDeAcertos,
+                    qtdDeErros: qtdDeErros,
+                    tipoSimulado: {
+                        materia: ret.id_Subject == "default" ?
+                            undefined : ret.id_Subject,
+                        assunto: ret.id_Topic == "default" ?
+                            undefined : ret.id_Topic
+                    }
+                })
+                    .then(() => {
+                        navigation.navigate('Home')
+                        return navigation.navigate('Histórico');
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        alert('Algum Erro Ocorreu\nVoltando para Home')
+                        return navigation.navigate('Home')
+                    })
+
+            })
+            .catch(e => {
+                console.log(e);
+                alert('Algum Erro Ocorreu\nVoltando para Home')
+                return navigation.navigate('Home')
+            })
+
         storage.remove({ key: 'questions' })
-        navigation.navigate('Home')
-        return navigation.navigate('Histórico');
+
+
     }
 
     return (

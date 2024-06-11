@@ -18,8 +18,6 @@ const Simulado2 = ({ route }) => {
 
   const { subject } = route.params
 
-  console.log(subject)
-
   const [topics, setTopics] = useState([{ nome: "Nenhum", _id: "default" }])
 
   const handleGet = useCallback(async () => {
