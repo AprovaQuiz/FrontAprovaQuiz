@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { TextInputMask } from 'react-native-masked-text';
 
 const Informacoes = () => {
   const navigation = useNavigation();
@@ -109,9 +110,13 @@ const Informacoes = () => {
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Data de Nascimento</Text>
-            <TextInput
+            <TextInputMask
+              type={'datetime'}
+              options={{
+                format: 'DD/MM/YYYY',
+              }}
               style={styles.input}
-              placeholder="Sua data de nascimento"
+              placeholder="DD/MM/AAAA"
               placeholderTextColor="#ccc"
               keyboardType="numeric"
               value={birthdate}
@@ -121,9 +126,15 @@ const Informacoes = () => {
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Número de Telefone</Text>
-            <TextInput
+            <TextInputMask
+              type={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) ',
+              }}
               style={styles.input}
-              placeholder="Seu número de telefone"
+              placeholder="(99) 99999-9999"
               placeholderTextColor="#ccc"
               keyboardType="numeric"
               value={phoneNumber}
