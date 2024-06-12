@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const QuestaoVestibular = ({ titulo, enunciado, alternativas, pergunta }) => {
-  const [respostaSelecionada, setRespostaSelecionada] = useState(null);
+const QuestaoVestibular = ({ titulo, enunciado, alternativas, pergunta, respRegistrada, acerto, alternativaCorreta }) => {
 
-  const selecionarResposta = (index) => {
-    setRespostaSelecionada(index);
-  };
+  function handleSelect(index) {
+    if (acerto && respRegistrada == index)
+      return styles.alternativaSelecionadaAcerto
+    if (!acerto && respRegistrada == index) {
+      return styles.alternativaSelecionadaErro
+    }
+    if (alternativaCorreta == index)
+      return styles.alternativaSelecionadaAcerto
+  }
+
+  function handleSelectText(index) {
+    if (acerto && respRegistrada == index)
+      return styles.alternativaTextSelecionada
+    else if (!acerto && respRegistrada == index || alternativaCorreta == index) {
+      return styles.alternativaTextSelecionada
+    }
+
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>{titulo}</Text>
+      <Text style={styles.titulo}>Questão {titulo}</Text>
       <Text style={styles.enunciado}>{enunciado}</Text>
       <Text style={styles.pergunta}>{pergunta}</Text>
       <View style={styles.alternativasContainer}>
-        {alternativas.map((alternativa, index) => (
+        {alternativas?.map((alternativa, index) => (
           <TouchableOpacity
             key={index}
             style={styles.alternativaButton}
@@ -23,20 +37,20 @@ const QuestaoVestibular = ({ titulo, enunciado, alternativas, pergunta }) => {
             <View
               style={[
                 styles.alternativaCircle,
-                respostaSelecionada === index && styles.alternativaSelecionada,
+                handleSelect(index)
               ]}
             >
               <Text
                 style={[
                   styles.alternativaText,
                   styles.alternativaTextUpperCase,
-                  respostaSelecionada === index && styles.alternativaTextSelecionada,
+                  handleSelectText(index)
                 ]}
               >
                 {String.fromCharCode(65 + index)}
               </Text>
             </View>
-            <Text style={styles.alternativaText}>{alternativa}</Text>
+            <Text style={styles.alternativaText}>{alternativa.textoAlt}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -92,8 +106,11 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 20,
   },
-  alternativaSelecionada: {
+  alternativaSelecionadaAcerto: {
     backgroundColor: '#4CAF50',
+  },
+  alternativaSelecionadaErro: {
+    backgroundColor: '#c30010',
   },
   alternativaTextSelecionada: {
     fontWeight: 'bold',

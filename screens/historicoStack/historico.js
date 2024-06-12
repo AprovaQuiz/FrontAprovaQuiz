@@ -34,7 +34,7 @@ const Historico = () => {
 
     await axiosAprovaApi.get(`/historics/myHistorics`)
       .then(r => {
-        setHistoric(r.data)
+        setHistoric(r.data.reverse())
       })
       .catch(e => {
         console.log(e)
@@ -61,8 +61,13 @@ const Historico = () => {
 
   const navigateToHistoricoLista = () => {
     setModalVisible(false);
-    navigation.navigate('HistoricoLista', { questoes: selectedItem.questoes });
+    navigation.navigate('HistoricoLista', { questoes: selectedItem.questoesFeitas });
   };
+
+  function handleDate() {
+    const date = new Date(selectedItem?.createdAt)
+    return <Text style={styles.modalDate}> {"Realizado em: " + date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()}</Text>
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -118,12 +123,8 @@ const Historico = () => {
                   <Text style={styles.modalTitle}>{selectedItem?.tipoSimulado?.materia?.pertence != undefined ? selectedItem.tipoSimulado?.materia?.pertence : "Geral"}</Text>
                   <Text style={styles.modalText}>{selectedItem?.tipoSimulado?.materia?.nome != undefined ? selectedItem.tipoSimulado?.materia?.nome : "Geral"}</Text>
                   <Text style={styles.modalText}>{selectedItem?.tipoSimulado?.assunto?.nome != undefined ? selectedItem.tipoSimulado?.assunto?.nome : "Geral"}</Text>
-                  <Text style={styles.modalDate}>
-                    {() => {
-                      const date = new Date(item.createdAt)
-                      return "Realizado em: " + date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
-                    }}
-                  </Text>
+                  {handleDate()}
+
                 </View>
               </View>
               <View style={styles.questoes}>

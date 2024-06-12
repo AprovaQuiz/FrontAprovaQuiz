@@ -13,9 +13,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 const ListaDeQuestoes = () => {
   const navigation = useNavigation();
-  
+
   const navigateToPesquisa = () => {
-    navigation.navigate('Pesquisa'); 
+    navigation.navigate('Pesquisa');
   };
 
 
@@ -36,8 +36,8 @@ const ListaDeQuestoes = () => {
         </View>
         <FlatList
           data={questoes}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <Card questao={item} />}
+          keyExtractor={(item) => item._id.toString()}
+          renderItem={({ item, index }) => <Card questaoAnswered={item} index={index} />}
         />
       </View>
     </SafeAreaView>

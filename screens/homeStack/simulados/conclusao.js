@@ -51,7 +51,9 @@ const ConclusaoSimulado = ({ navigation, route }) => {
                     }
                 })
                     .then(() => {
-                        navigation.navigate('Home')
+                        navigation.reset({
+                            routes: [{ name: 'Histórico' }, { name: 'Home' }],
+                        });
                         return navigation.navigate('Histórico');
                     })
                     .catch(e => {
