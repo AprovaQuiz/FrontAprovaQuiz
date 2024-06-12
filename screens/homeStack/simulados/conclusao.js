@@ -61,6 +61,9 @@ const ConclusaoSimulado = ({ navigation, route }) => {
                         alert('Algum Erro Ocorreu\nVoltando para Home')
                         return navigation.navigate('Home')
                     })
+                    .finally(() => {
+                        storage.remove({ key: 'questions' })
+                    })
 
             })
             .catch(e => {
@@ -68,8 +71,6 @@ const ConclusaoSimulado = ({ navigation, route }) => {
                 alert('Algum Erro Ocorreu\nVoltando para Home')
                 return navigation.navigate('Home')
             })
-
-        storage.remove({ key: 'questions' })
 
 
     }

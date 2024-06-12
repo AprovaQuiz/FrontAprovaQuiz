@@ -24,7 +24,6 @@ const ResetPasswordScreen = ({ route }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [stayConnected, setStayConnected] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleResetPassword = async () => {
@@ -109,18 +108,6 @@ const ResetPasswordScreen = ({ route }) => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.checkbox}
-            onPress={() => setStayConnected(!stayConnected)}
-          >
-            <View
-              style={[
-                styles.checkboxButton,
-                stayConnected && styles.checkedCheckbox,
-              ]}
-            />
-            <Text style={styles.checkboxText}>Manter conectado</Text>
-          </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
           <Text style={styles.buttonText}>Confirmar</Text>

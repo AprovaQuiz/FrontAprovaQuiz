@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import storage from '../../config/storage';
 
 const MenuButton = ({ title, iconName, onPress, isLast }) => {
   return (
@@ -37,8 +38,10 @@ const Config = () => {
   };
 
   const confirmLogout = () => {
-    console.log('Logout executado');
-    setShowModal(false); 
+    storage.remove({ key: 'stayConnected' })
+    storage.remove({ key: 'access-token' })
+    navigation.navigate('CadLogin')
+    setShowModal(false);
   };
 
   const closeModal = () => {
@@ -56,12 +59,12 @@ const Config = () => {
   const navigateToKeys = () => {
     navigation.navigate('Senha');
   };
-  
+
 
   return (
     <View style={styles.menuContainer}>
-      <MenuButton title="Informações Pessoais" iconName="person" onPress={navigateToInfosPessoais}/>
-      <MenuButton title="Senha" iconName="lock-closed" onPress={navigateToKeys}/>
+      <MenuButton title="Informações Pessoais" iconName="person" onPress={navigateToInfosPessoais} />
+      <MenuButton title="Senha" iconName="lock-closed" onPress={navigateToKeys} />
       <MenuButton
         title="Notificações"
         iconName="notifications"
@@ -165,16 +168,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 15,
     backgroundColor: '#8A45ED',
-    borderBottomWidth: 3, 
-    borderBottomColor: '#3C1673', 
+    borderBottomWidth: 3,
+    borderBottomColor: '#3C1673',
   },
   modalButtonYes: {
     paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 15,
     backgroundColor: '#F34242',
-    borderBottomWidth: 3, 
-    borderBottomColor: '#F41A1A', 
+    borderBottomWidth: 3,
+    borderBottomColor: '#F41A1A',
   },
   buttonText: {
     color: '#fff',

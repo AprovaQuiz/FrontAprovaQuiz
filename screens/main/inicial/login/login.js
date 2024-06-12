@@ -40,7 +40,8 @@ const LoginScreen = () => {
       .post("/users/login", data)
       .then((r) => {
         storage.save({ key: 'access-token', data: r.data.accessToken })
-
+        if (stayConnected)
+          storage.save({ key: 'stayConnected', data: true })
         return navigation.navigate('Main');
       })
       .catch((e) => {
