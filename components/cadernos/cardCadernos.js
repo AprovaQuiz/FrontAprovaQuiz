@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const CardCadernos = ({ cadernos }, onCardClick) => {
+const CardCadernos = ({ cadernos, onCardClick }) => {
   return (
     <View>
       {cadernos.map((caderno, index) => (

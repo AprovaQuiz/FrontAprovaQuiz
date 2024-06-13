@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+var Buffer = require('buffer/').Buffer
 
-const User = () => {
+const User = ({ props }) => {
+
+  function image() {
+    if (props.image != null || typeof props.image != 'undefined') {
+
+      return `data:image/png;base64,${Buffer.from(props.image.img.data).toString('base64')}`
+    } else {
+      return `https://cdn-icons-png.flaticon.com/512/17/17004.png`
+    }
+  }
+
+
   return (
     <View style={styles.userItem}>
-        <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/17/17004.png' }} style={styles.characterImage} />
-        <View style={styles.userTextContainer}>
-          <Text style={styles.name}>Nome</Text>
-          <Text style={styles.username}>@nomedeusuario</Text>
-        </View>
+      <Image source={{ uri: image() }} style={styles.characterImage} />
+      <View style={styles.userTextContainer}>
+        <Text style={styles.name}>{props.nome}</Text>
+        <Text style={styles.username}>@{props.userName}</Text>
       </View>
+    </View>
   );
 };
 
@@ -32,6 +43,8 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 50,
     marginRight: 10,
+    alignContent: 'center',
+    justifyContent: 'center'
   },
   userTextContainer: {
     flex: 1,

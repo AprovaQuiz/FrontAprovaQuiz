@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,19 +10,39 @@ import {
 import Usuario from '../../components/perfil/user';
 import Config from '../../components/perfil/config';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
+import { axiosAprovaApi } from '../../config/http';
 
 const PerfilScreen = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   const navigateToEstatisticas = () => {
     navigation.navigate('Estatisticas');
   };
 
+  const [user, setUser] = useState({})
+
+  const handleGet = useCallback(async () => {
+
+    await axiosAprovaApi.get(`/users/myuser`)
+      .then(r => {
+        setUser(r.data)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+
+  }, [])
+
+  useEffect(() => {
+    handleGet()
+  }, [handleGet]);
+
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Usuario />
+        <Usuario props={user} />
         <View style={styles.divider} />
         <View style={styles.estatisticas}>
           <View style={styles.item}>
@@ -46,7 +66,7 @@ const PerfilScreen = () => {
         <View style={styles.header}>
           <Text style={styles.configTitle}>Configurações</Text>
         </View>
-        <Config />
+        <Config props={user} />
       </ScrollView>
     </SafeAreaView>
   );

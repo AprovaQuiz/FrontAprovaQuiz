@@ -25,11 +25,6 @@ const SignUpScreen = () => {
 
   const handleContinue = () => {
 
-    if (!isValidFullName(fullName)) {
-      Alert.alert('Erro', 'Por favor, insira um nome válido.');
-      return;
-    }
-
     if (!isValidDateOfBirth(dateOfBirth)) {
       Alert.alert('Erro', 'Por favor, insira uma data de nascimento válida.');
       return;
@@ -39,7 +34,6 @@ const SignUpScreen = () => {
       Alert.alert('Erro', 'Por favor, insira um número de celular válido.');
       return;
     }
-
 
 
     storage.save({
@@ -54,9 +48,6 @@ const SignUpScreen = () => {
     return navigation.navigate('ConfirmationScreen');
   };
 
-  const isValidFullName = (name) => {
-    return /^[a-zA-Z\s]*$/.test(name);
-  };
 
   const isValidDateOfBirth = (date) => {
     // Aqui você pode implementar a validação para a data de nascimento conforme necessário
@@ -103,16 +94,17 @@ const SignUpScreen = () => {
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Data de nacimento</Text>
-          <TextInputMaskr
+          <TextInputMask
+            type={'datetime'}
             options={{
               format: 'DD/MM/YYYY',
             }}
             style={styles.input}
             placeholder="DD/MM/AAAA"
             placeholderTextColor="#ccc"
-            value={dateOfBirth}
-            onChangeText={setDateOfBirth}
             keyboardType="numeric"
+            value={dateOfBirth}
+            onChangeText={(text) => setDateOfBirth(text)}
           />
         </View>
 

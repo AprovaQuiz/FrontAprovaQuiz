@@ -29,7 +29,7 @@ const MenuButton = ({ title, iconName, onPress, isLast }) => {
   );
 };
 
-const Config = () => {
+const Config = ({ props }) => {
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
 
@@ -49,7 +49,7 @@ const Config = () => {
   };
 
   const navigateToInfosPessoais = () => {
-    navigation.navigate('InfosPessoais');
+    navigation.navigate('InfosPessoais', { props });
   };
 
   const navigateToNotifications = () => {

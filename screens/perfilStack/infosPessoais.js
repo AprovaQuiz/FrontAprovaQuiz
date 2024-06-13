@@ -12,17 +12,32 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text';
+import { axiosAprovaApi } from '../../config/http';
+var Buffer = require('buffer/').Buffer
 
-const Informacoes = () => {
+const Informacoes = ({ route }) => {
   const navigation = useNavigation();
-  
-  const [username, setUsername] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthdate, setBirthdate] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const user = route.params.props;
 
-  const handleConfirm = () => {
+  const [username, setUsername] = useState(user.userName);
+  const [fullName, setFullName] = useState(user.nome);
+  const [email, setEmail] = useState(user.email);
+  const [birthdate, setBirthdate] = useState(() => {
+    const date = new Date(user.dataNasc)
+    return date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+  });
+  const [phoneNumber, setPhoneNumber] = useState(user.numCelular);
+
+  function image() {
+    if (user.image != null || typeof user.image != 'undefined') {
+
+      return `data:image/png;base64,${Buffer.from(user.image.img.data).toString('base64')}`
+    } else {
+      return `https://cdn-icons-png.flaticon.com/512/17/17004.png`
+    }
+  }
+
+  const handleConfirm = async () => {
     // Verificação de dados antes de confirmar
     if (!username || !email || !birthdate || !phoneNumber) {
       alert('Todos os campos são obrigatórios.');
@@ -43,18 +58,29 @@ const Informacoes = () => {
       return;
     }
 
-    if (!/^\d+$/.test(birthdate)) {
-      alert('A data de nascimento deve conter apenas números.');
-      return;
-    }
 
-    if (!/^\d+$/.test(phoneNumber)) {
-      alert('O número de telefone deve conter apenas números.');
-      return;
-    }
 
-    // Simulação de confirmação de conta
-    alert('Informações salvas com sucesso!');
+
+    return await axiosAprovaApi.patch('/users/myuser', {
+      nome: fullName,
+      userName: username,
+      dataNasc: birthdate,
+      numCelular: phoneNumber,
+      email: email
+    })
+      .then(() => {
+        alert("Alterações feitas com sucesso")
+        navigation.reset({
+          routes: [{ name: 'Perfil' }],
+        });
+
+      })
+      .catch(e => {
+        if (e.response.data.message == "Email já cadastrado" || e.response.data.message == "Username já em uso")
+          alert(e.response.data.message)
+        else
+          alert(e)
+      })
   };
 
   return (
@@ -68,7 +94,7 @@ const Informacoes = () => {
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/17/17004.png' }} style={styles.characterImage} />
+            <Image source={{ uri: image() }} style={styles.characterImage} />
             <TouchableOpacity style={styles.editButton}>
               <Ionicons name="pencil" size={20} color="#fff" />
             </TouchableOpacity>
