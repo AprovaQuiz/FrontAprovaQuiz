@@ -10,7 +10,7 @@ var Buffer = require('buffer/').Buffer
 const User = ({ props }) => {
 
   function image() {
-    if (props.image != null || typeof props.image != 'undefined') {
+    if ((props.image != null || typeof props.image != 'undefined') && props.image?.img != null) {
 
       return `data:image/png;base64,${Buffer.from(props.image.img.data).toString('base64')}`
     } else {

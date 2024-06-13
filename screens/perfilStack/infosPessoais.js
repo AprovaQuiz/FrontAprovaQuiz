@@ -8,12 +8,14 @@ import {
   Image,
   ScrollView,
   SafeAreaView,
+  Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInputMask } from 'react-native-masked-text';
 import { axiosAprovaApi } from '../../config/http';
 var Buffer = require('buffer/').Buffer
+import * as ImagePicker from 'expo-image-picker';
 
 const Informacoes = ({ route }) => {
   const navigation = useNavigation();
@@ -27,15 +29,53 @@ const Informacoes = ({ route }) => {
     return date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
   });
   const [phoneNumber, setPhoneNumber] = useState(user.numCelular);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   function image() {
-    if (user.image != null || typeof user.image != 'undefined') {
+    if ((user.image != null || typeof user.image != 'undefined') && user.image?.img != null) {
 
       return `data:image/png;base64,${Buffer.from(user.image.img.data).toString('base64')}`
     } else {
       return `https://cdn-icons-png.flaticon.com/512/17/17004.png`
     }
   }
+
+  const createFormData = (uri) => {
+    const fileName = uri.split('/').pop();
+    const formData = new FormData();
+    const fileType = fileName.split('.').pop();
+    formData.append('image', {
+      name: fileName,
+      uri: Platform.OS === 'ios' ? uri.replace('file://', '') : uri,
+      type: `image/${fileType}`,
+
+    });
+    formData.append('name', fileName)
+    return formData;
+  };
+
+  const pickImageAsync = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos da permissão da galeria');
+        return;
+      } else {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: false,
+          aspect: [4, 3],
+          quality: 1,
+        });
+
+        if (!result.canceled) {
+          setSelectedImage(result.assets[0].uri);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleConfirm = async () => {
     // Verificação de dados antes de confirmar
@@ -58,7 +98,29 @@ const Informacoes = ({ route }) => {
       return;
     }
 
+    let imageId = null
+    if (selectedImage != null) {
+      const data = createFormData(selectedImage)
+      console.log(data)
 
+      await axiosAprovaApi.post('/images', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(async (r) => {
+          imageId = r.data.savedID
+          if ((user.image != undefined) || (user.image != null)) {
+            await axiosAprovaApi.delete(`/images/${user.image._id}`)
+              .then(() => { console.log('apagou') })
+              .catch((e) => { console.log(e) })
+          }
+        })
+        .catch((e) => {
+          console.log(e)
+          alert("Algum erro com a imagem")
+        })
+    }
 
 
     return await axiosAprovaApi.patch('/users/myuser', {
@@ -66,11 +128,12 @@ const Informacoes = ({ route }) => {
       userName: username,
       dataNasc: birthdate,
       numCelular: phoneNumber,
-      email: email
+      email: email,
+      image: imageId != null ? imageId : undefined
     })
       .then(() => {
         alert("Alterações feitas com sucesso")
-        navigation.reset({
+        return navigation.reset({
           routes: [{ name: 'Perfil' }],
         });
 
@@ -94,8 +157,12 @@ const Informacoes = ({ route }) => {
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: image() }} style={styles.characterImage} />
-            <TouchableOpacity style={styles.editButton}>
+            {selectedImage ?
+              <Image source={{ uri: selectedImage }} style={styles.characterImage} />
+              :
+              <Image source={{ uri: image() }} style={styles.characterImage} />
+            }
+            <TouchableOpacity style={styles.editButton} onPress={pickImageAsync}>
               <Ionicons name="pencil" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
@@ -172,8 +239,12 @@ const Informacoes = ({ route }) => {
             <TouchableOpacity style={styles.buttonYes} onPress={handleConfirm}>
               <Text style={styles.buttonText}>Salvar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Cancelar</Text>
+            <TouchableOpacity style={styles.button} onPress={() => {
+              navigation.reset({
+                routes: [{ name: 'Perfil' }],
+              });
+            }}>
+              <Text style={styles.buttonText} >Cancelar</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { axiosAprovaApi } from '../../config/http';
 
 const Senha = () => {
   const navigation = useNavigation();
@@ -17,6 +18,7 @@ const Senha = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
+  const [oldPasswordVisible, setOldPasswordVisible] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -28,10 +30,19 @@ const Senha = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
-  const handleConfirm = () => {
+  const toggleOldPassword = () => {
+    setOldPasswordVisible(!oldPasswordVisible);
+  };
+
+  const handleConfirm = async () => {
     // Verificação de dados antes de confirmar
     if (!oldPassword || !password || !confirmPassword) {
       alert('Todos os campos são obrigatórios.');
+      return;
+    }
+
+    if (password.length < 6 || !/[A-Z]/.test(password)) {
+      alert('Senha fraca, precisa ao menos 6 caracteres e ao menos uma letra Maiúscula');
       return;
     }
 
@@ -40,8 +51,32 @@ const Senha = () => {
       return;
     }
 
-    // Simulação de confirmação de conta
-    alert('Senha alterada com sucesso!');
+    await axiosAprovaApi.post('/users/verifyPassword', {
+      senha: oldPassword
+    })
+      .then(async () => {
+        await axiosAprovaApi.patch('/users/myuser', {
+          senha: password
+        })
+          .then(() => {
+            alert('Senha alterada com sucesso!');
+            return navigation.reset({
+              routes: [{ name: 'Perfil' }],
+            });
+          })
+          .catch((e) => {
+            console.log(e)
+            alert('Erro no sistema')
+          })
+      })
+      .catch((e) => {
+        if (e.response.data.message == "Senha inválida") {
+          alert('Senha antiga incorreta')
+        } else {
+          console.log(e)
+        }
+      })
+
   };
 
   return (
@@ -61,15 +96,15 @@ const Senha = () => {
                 style={styles.inputPassword}
                 placeholder="Sua senha"
                 placeholderTextColor="#ccc"
-                secureTextEntry={!passwordVisible}
+                secureTextEntry={!oldPasswordVisible}
                 value={oldPassword}
                 onChangeText={(text) => setOldPassword(text)}
               />
               <TouchableOpacity
-                onPress={togglePasswordVisibility}
+                onPress={toggleOldPassword}
                 style={styles.icon}>
                 <Ionicons
-                  name={passwordVisible ? 'eye-off' : 'eye'}
+                  name={oldPasswordVisible ? 'eye-off' : 'eye'}
                   size={24}
                   color="#ccc"
                 />
@@ -124,10 +159,14 @@ const Senha = () => {
           </View>
 
           <View style={styles.buttons}>
-            <TouchableOpacity style={styles.buttonYes}>
+            <TouchableOpacity style={styles.buttonYes} onPress={handleConfirm}>
               <Text style={styles.buttonText}>Salvar</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => {
+              navigation.reset({
+                routes: [{ name: 'Perfil' }],
+              });
+            }}>
               <Text style={styles.buttonText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
