@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import grupos from '../../data/noticias/grupos'; 
+import grupos from '../../data/noticias/grupos';
+import { useNavigation } from '@react-navigation/native';
 
 const CardGrupos = ({ grupos }) => {
+  const navigation = useNavigation();
   const handleGroupPress = (nome) => {
-    navigation.navigate('NoticiasLista', { groupName: nome });
+    navigation.navigate('Notícias', { groupName: nome });
   };
 
   return (
