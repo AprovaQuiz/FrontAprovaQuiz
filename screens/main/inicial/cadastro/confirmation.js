@@ -71,14 +71,14 @@ const ConfirmationScreen = () => {
     await axiosAprovaApi.post('/users', singUpData)
       .then(() => {
         navigation.replace('Login');
+        storage.remove({ key: 'singUpCredentials' })
       })
       .finally(() => {
         setModalVisible(false)
-        storage.remove({ key: 'singUpCredentials' })
       })
       .catch(e => {
-        if (e.response.data.message == "Email já cadastrado" || e.response.data.message == "Username já em uso")
-          alert(e.response.data.message)
+        if (e.response?.data.message == "Email já cadastrado" || e.response?.data.message == "Username já em uso")
+          alert(e.response?.data.message)
         else
           alert(e)
 
