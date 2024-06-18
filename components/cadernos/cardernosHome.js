@@ -11,9 +11,10 @@ import cadernos from '../../data/cadernos';
 const CadernosScreen = () => {
   const navigation = useNavigation();
 
-  const handleCardClick = (caderno) => {
+  const handleCardClick = (item) => {
     // Navegar para MateriasLista com a categoria do caderno
-    navigation.navigate('MateriasLista', { categoria: caderno.categoria });
+    navigation.navigate('Cadernos')
+    navigation.navigate('MateriasLista', { categoria: item.categoria });
   };
 
   return (
@@ -22,8 +23,8 @@ const CadernosScreen = () => {
         data={cadernos}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <CardCadernos cadernos={[item]} onCardClick={handleCardClick} />}
+        keyExtractor={(index) => index.toString()}
+        renderItem={({ item }) => <CardCadernos cadernos={[item]} onCardClick={() => handleCardClick(item)} />}
       />
     </View>
   );

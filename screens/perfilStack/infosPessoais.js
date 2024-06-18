@@ -26,8 +26,16 @@ const Informacoes = ({ route }) => {
   const [email, setEmail] = useState(user.email);
   const [birthdate, setBirthdate] = useState(() => {
     const date = new Date(user.dataNasc)
-    return date.getUTCDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+
+    let day = date.getUTCDate();
+    let month = (date.getMonth() + 1);
+    if (day < 10)
+      day = "0" + day
+    if (month < 10)
+      month = "0" + month
+    return `${day}${month}${date.getFullYear()}`
   });
+
   const [phoneNumber, setPhoneNumber] = useState(user.numCelular);
   const [selectedImage, setSelectedImage] = useState(null);
 

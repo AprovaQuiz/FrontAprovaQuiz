@@ -78,10 +78,12 @@ const ConfirmationScreen = () => {
         setModalVisible(false)
       })
       .catch(e => {
+        console.log(e.message)
         if (e.response?.data.message == "Email já cadastrado" || e.response?.data.message == "Username já em uso")
           alert(e.response?.data.message)
         else
           alert(e)
+
 
       })
 

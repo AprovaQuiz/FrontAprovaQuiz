@@ -150,13 +150,15 @@ const styles = StyleSheet.create({
   },
   alternativaText: {
     fontSize: 16,
+    flex: 1,
+    flexWrap: 'wrap'
   },
   alternativaTextUpperCase: {
     textTransform: 'uppercase',
     fontSize: 20,
   },
   alternativaSelecionada: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#993399',
   },
   alternativaTextSelecionada: {
     fontWeight: 'bold',
