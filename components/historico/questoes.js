@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
   },
   alternativaText: {
     fontSize: 16,
+    flex: 1,
+    flexWrap: 'wrap'
   },
   alternativaTextUpperCase: {
     textTransform: 'uppercase',
